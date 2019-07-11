@@ -29,6 +29,8 @@ jobs:
       # run tests!
       - run:
           name: run tests
+          environment:
+            TESTOPTS: "--ci-dir=/tmp/test-results"
           command: |
             mkdir /tmp/test-results
             bundle exec rake test
