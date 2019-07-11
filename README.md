@@ -1,5 +1,7 @@
 # Fulfil.io Rubygem
 
+[![CircleCI](https://circleci.com/gh/knowndecimal/fulfil.svg?style=svg&circle-token=da80ea6500af15b3a795a3913efe35742bab94c1)](https://circleci.com/gh/knowndecimal/fulfil)
+
 [Fulfil.io](https://fulfil.io)
 
 ## Installation
