@@ -30,7 +30,11 @@ FULFIL_TOKEN = 'token'
 
 fulfil = Fulfil::Client.new(subdomain: FULFIL_SUBDOMAIN, token: FULFIL_TOKEN, debug: false)
 sale_model = Fulfil::Model.new(client: fulfil, model_name: 'sale.sale')
-sales = sale_model.search(domain: [['id', '=', [10]]], fields: ['id', 'rec_name', 'lines'])
+
+sales = sale_model.search(
+  domain: [['id', '=', [10]]],
+  fields: ['id', 'rec_name', 'lines']
+)
 
 sale_model.fetch_associated(
   models: sales,

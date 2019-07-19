@@ -55,7 +55,7 @@ module Fulfil
       associated_ids =
         models.map { |model| model.dig(*source_keys) }.flatten.compact.uniq
 
-      return if associated_ids.none?
+      return [] if associated_ids.none?
 
       associated_models =
         @client.find(
