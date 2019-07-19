@@ -1,3 +1,5 @@
+require 'fulfil/query'
+
 module Fulfil
   class Model
     attr_reader :model_name
@@ -5,6 +7,7 @@ module Fulfil
     def initialize(client:, model_name:)
       @client = client
       @model_name = model_name
+      @query ||= Fulfil::Query.new
     end
 
     # Delegate this to the client, including the model_name so we don't have to
@@ -31,6 +34,15 @@ module Fulfil
         offset: offset,
         sort: sort
       )
+    end
+
+    def all
+      search(domain: query)
+    end
+
+    def query(**args)
+      @query.search(**args).query if args.any?
+      @query.query
     end
 
     def attributes
