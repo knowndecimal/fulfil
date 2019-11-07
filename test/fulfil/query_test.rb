@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'minitest/autorun'
 require 'fulfil/query'
 
@@ -6,7 +8,7 @@ class Fulfil::QueryTest < Minitest::Test
     @query = Fulfil::Query.new
   end
 
-    # -- #query -----------------------
+  # -- #query -----------------------
 
   def test_equals_query
     @query.search(id: 1)
@@ -24,12 +26,12 @@ class Fulfil::QueryTest < Minitest::Test
   end
 
   def test_case_insensitive_wildcard_query
-    @query.search(name: "chris%")
+    @query.search(name: 'chris%')
     assert_equal [['name', 'ilike', 'chris%']], @query.query
   end
 
   def test_case_sensitive_wildcard_query
-    @query.search(name: "chris%", options: { case_sensitive: true })
+    @query.search(name: 'chris%', options: { case_sensitive: true })
     assert_equal [['name', 'like', 'chris%']], @query.query
   end
 
@@ -56,11 +58,13 @@ class Fulfil::QueryTest < Minitest::Test
   end
 
   def test_case_insensitive_wildcard_exclude
-    assert_raises { @query.exclude(name: "chris%") }
+    assert_raises { @query.exclude(name: 'chris%') }
   end
 
   def test_case_sensitive_wildcard_query_exclude
-    assert_raises { @query.exclude(name: "chris%", options: { case_sensitive: true }) }
+    assert_raises do
+      @query.exclude(name: 'chris%', options: { case_sensitive: true })
+    end
   end
 
   def test_nested_exclude
@@ -101,8 +105,8 @@ class Fulfil::QueryTest < Minitest::Test
           ],
           [
             ['sale', 'not in', [1]]
-          ],
-        ],
+          ]
+        ]
       ],
       @query.query
     )
@@ -115,7 +119,7 @@ class Fulfil::QueryTest < Minitest::Test
     assert_equal(
       [
         ['id', '!=', 1],
-        ['sale', 'in', [2, 4, 6]],
+        ['sale', 'in', [2, 4, 6]]
       ],
       @query.query
     )
@@ -130,13 +134,13 @@ class Fulfil::QueryTest < Minitest::Test
         [
           'OR',
           [
-            ['id', '!=', 1],
+            ['id', '!=', 1]
           ],
           [
-            ['sale', 'not in', [1]],
-          ],
+            ['sale', 'not in', [1]]
+          ]
         ],
-        ['sale', 'in', [2, 4, 6]],
+        ['sale', 'in', [2, 4, 6]]
       ],
       @query.query
     )
@@ -153,12 +157,12 @@ class Fulfil::QueryTest < Minitest::Test
         [
           'OR',
           [
-            ['id', '!=', 2],
+            ['id', '!=', 2]
           ],
           [
-            ['sale', 'not in', [2, 4, 6]],
-          ],
-        ],
+            ['sale', 'not in', [2, 4, 6]]
+          ]
+        ]
       ],
       @query.query
     )
