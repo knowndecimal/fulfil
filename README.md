@@ -9,7 +9,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fulfil'
+gem 'fulfil-io'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fulfil
+    $ gem install fulfil-io
 
 ## Usage
 
