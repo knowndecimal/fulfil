@@ -79,7 +79,7 @@ git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygem
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/knowndecima//fulfil. This project is intended to be a safe,
+https://github.com/knowndecimal/fulfil. This project is intended to be a safe,
 welcoming space for collaboration, and contributors are expected to adhere to
 the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
