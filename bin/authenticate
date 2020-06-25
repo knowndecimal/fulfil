@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'bundler'
+Bundler.setup(:default, :development)
+
+require 'oauth2'
+require 'fulfil'
+
+def get_token
+  client_id = ENV.fetch('CLIENT_ID')
+  client_secret = ENV.fetch('CLIENT_SECRET')
+  subdomain = ENV.fetch('SUBDOMAIN')
+
+  base_url = "https://#{subdomain}.fulfil.io" # "oauth/authorize"
+
+  client = OAuth2::Client.new(client_id, client_secret, site: base_url)
+  authorize_url = client.auth_code.authorize_url(
+    redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+    scope: ['sale.channel:read'].join(','),
+    access_type: 'offline_access'
+  )
+
+  output 'Open this URL:'
+  system %x[echo "#{authorize_url.to_s}" | pbcopy]
+  output authorize_url.to_s
+
+  output 'Copy the generated token. Paste it here:'
+
+  auth_token = gets.chomp
+  output ''
+  token = client.auth_code.get_token(auth_token)
+
+  output 'Results:'
+  pp token.to_hash
+  output ''
+
+  output 'Offline access token:'
+  output token.to_hash.dig('offline_access_token')
+end
+
+def output(text, lines: 2)
+  puts text
+  puts "\n" * lines
+end
+
+def fulfil
+  @fulfil ||= Fulfil::Client.new(
+    subdomain: ENV.fetch('SUBDOMAIN'), token: ENV.fetch('TOKEN')
+  )
+end
+
+get_token
