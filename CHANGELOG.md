@@ -1,6 +1,6 @@
 ## 0.2.0
 
-- Make token optional and allow specifying headers at least for enabling authenticaten via 'X-API-KEY' header
+- Make token optional and allow specifying headers at least for enabling authentication via 'X-API-KEY' header
 , because initially implemented in 0.1.0 bearer auth isn't working.
 
 - Fix Query `build_search_term` and `build_exclude_term` to be compatible with Ruby < 2.4, analyzing value for 'Fixnum
