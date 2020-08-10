@@ -68,7 +68,7 @@ module Fulfil
       case value.class.name
       when 'Array'
         [[key, 'in', value]]
-      when 'Integer'
+      when 'Fixnum', 'Integer'
         [[key, '=', value]]
       when 'Range'
         [
@@ -96,7 +96,7 @@ module Fulfil
       case value.class.name
       when 'Array'
         [[key, 'not in', value]]
-      when 'Integer'
+      when 'Fixnum', 'Integer'
         [[key, '!=', value]]
       when 'Range'
         [

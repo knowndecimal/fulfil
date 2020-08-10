@@ -4,10 +4,11 @@ require 'fulfil/response_parser'
 
 module Fulfil
   class Client
-    def initialize(subdomain:, token:, debug: false)
+    def initialize(subdomain:, token: nil, debug: false, headers: {})
       @subdomain = subdomain
       @token = token
       @debug = debug
+      @headers = headers
     end
 
     def find(model:, ids: [], id: nil, fields: %w[id rec_name])
@@ -36,9 +37,7 @@ module Fulfil
       parse(results: results)
     end
 
-    def search(
-      model:, domain:, offset: nil, limit: 100, sort: nil, fields: %w[id]
-    )
+    def search(model:, domain:, offset: nil, limit: 100, sort: nil, fields: %w[id])
       uri = URI("#{model_url(model: model)}/search_read")
       body = [domain, offset, limit, sort, fields]
 
@@ -76,13 +75,15 @@ module Fulfil
       raise Error, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => ex
       raise Error, "Can't process response: #{ex}"
-      []
     end
 
     def client
-      @client ||=
-        HTTP.persistent(base_url).auth("Bearer #{@token}")
-        .use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
+      return @client if defined?(@client)
+
+      @client = HTTP.persistent(base_url).use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
+      @client = @client.auth("Bearer #{@token}") if @token
+      @client = @client.headers(@headers) if @headers
+      @client
     end
   end
 end

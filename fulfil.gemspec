@@ -6,7 +6,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fulfil/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'fulfil'
+  spec.name          = 'fulfil-io'
   spec.version       = Fulfil::VERSION
   spec.authors       = ['Chris Moore', 'Kat Fairbanks']
   spec.email         = ['chris@knowndecimal.com']
@@ -31,5 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-ci', '~> 3.4' if ENV['CI']
   spec.add_development_dependency 'minitest-reporters', '~> 1.3'
   spec.add_development_dependency 'oauth2', '~> 1.4'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake'
 end
