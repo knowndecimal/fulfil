@@ -9,12 +9,12 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fulfil-io'
+gem 'fulfil-io', require: 'fulfil'
 ```
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -22,17 +22,20 @@ Or install it yourself as:
 
 ## Usage
 
+Environment variables:
+
+- FULFIL_SUBDOMAIN - required to be set.
+- FULFIL_TOKEN - required for oauth bearer authentication
+- FULFIL_API_KEY - required for authentication via the X-API-KEY request header
+
+###Note: 
+
+When FULFIL_TOKEN is present, the FULFIL_API_KEY will be ignored. So, if oauth doesn't work, returning an Unauthorized error, to use the FULFIL_API_KEY, the FULFIL_TOKEN shouldn't be specified.
+
 ```ruby
-require 'fulfil'
+require 'fulfil' # this is necessary only in case of running without bundler
 
-FULFIL_SUBDOMAIN = 'subdomain'
-FULFIL_TOKEN = 'token'
-
-fulfil = Fulfil::Client.new(
-  subdomain: FULFIL_SUBDOMAIN,
-  token: FULFIL_TOKEN,
-  debug: false
-)
+fulfil = Fulfil::Client.new # or, to enable request debugging, Fulfil::Client.new(debug: true)
 
 sale_model = Fulfil::Model.new(
   client: fulfil,
