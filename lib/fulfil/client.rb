@@ -3,12 +3,17 @@ require 'logger'
 require 'fulfil/response_parser'
 
 module Fulfil
+  SUBDOMAIN = ENV['FULFIL_SUBDOMAIN']
+  API_KEY = ENV['FULFIL_API_KEY']
+  OAUTH_TOKEN = ENV['FULFIL_TOKEN']
+
   class Client
-    def initialize(subdomain:, token: nil, debug: false, headers: {})
+    def initialize(subdomain: SUBDOMAIN, token: OAUTH_TOKEN, headers: { 'X-API-KEY' => API_KEY }, debug: false)
       @subdomain = subdomain
       @token = token
       @debug = debug
       @headers = headers
+      @headers.delete('X-API-KEY') if @token
     end
 
     def find(model:, ids: [], id: nil, fields: %w[id rec_name])
@@ -82,7 +87,7 @@ module Fulfil
 
       @client = HTTP.persistent(base_url).use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
       @client = @client.auth("Bearer #{@token}") if @token
-      @client = @client.headers(@headers) if @headers
+      @client = @client.headers(@headers)
       @client
     end
   end
