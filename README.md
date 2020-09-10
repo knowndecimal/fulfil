@@ -28,9 +28,9 @@ Environment variables:
 - FULFIL_TOKEN - required for oauth bearer authentication
 - FULFIL_API_KEY - required for authentication via the X-API-KEY request header
 
-###Note: 
-
-When FULFIL_TOKEN is present, the FULFIL_API_KEY will be ignored. So, if oauth doesn't work, returning an Unauthorized error, to use the FULFIL_API_KEY, the FULFIL_TOKEN shouldn't be specified.
+**Note:** When FULFIL_TOKEN is present, the FULFIL_API_KEY will be ignored. So,
+if oauth doesn't work, returning an Unauthorized error, to use the
+FULFIL_API_KEY, the FULFIL_TOKEN shouldn't be specified.
 
 ```ruby
 require 'fulfil' # this is necessary only in case of running without bundler
