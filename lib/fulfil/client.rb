@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'http'
 require 'logger'
 require 'fulfil/response_parser'
@@ -77,7 +79,7 @@ module Fulfil
       if response.status.ok? || response.status.created?
         response.parse
       elsif response.code == 401
-        raise StandardError, "Not authorized"
+        raise StandardError, 'Not authorized'
       else
         puts response.body.to_s
         raise Error, 'Error encountered while processing response:'
