@@ -79,14 +79,18 @@ module Fulfil
       elsif response.code == 401
         raise StandardError, "Not authorized"
       else
-        pp response.parse
-        raise StandardError, "Invalid response"
+        puts response.body.to_s
+        raise Error, 'Error encountered while processing response:'
       end
-    rescue HTTP::ConnectionError => ex
+    rescue HTTP::Error => e
+      puts e
+      raise Error, 'Unhandled HTTP error encountered'
+    rescue HTTP::ConnectionError => e
       puts "Couldn't connect"
       raise Error, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => ex
       raise Error, "Can't process response: #{ex}"
+      []
     end
 
     def client
