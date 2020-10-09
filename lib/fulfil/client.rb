@@ -59,9 +59,28 @@ module Fulfil
       parse(results: results)
     end
 
+    def put(model:, id:, body: {})
+      uri = URI(model_url(model: model, id: id))
+
+      result = request(verb: :put, endpoint: uri, json: body)
+      parse(result: result)
+    end
+
     private
 
     def parse(result: nil, results: [])
+      if result.present?
+        parse_single(result: result)
+      else
+        parse_multiple(results: results)
+      end
+    end
+
+    def parse_single(result:)
+      Fulfil::ResponseParser.parse(item: result)
+    end
+
+    def parse_multiple(results:)
       results.map { |result| Fulfil::ResponseParser.parse(item: result) }
     end
 
@@ -69,8 +88,8 @@ module Fulfil
       "https://#{@subdomain}.fulfil.io/api/v2/model"
     end
 
-    def model_url(model:)
-      [base_url, model].join('/')
+    def model_url(model:, id: nil)
+      [base_url, model, id].compact.join('/')
     end
 
     def request(verb: :get, endpoint:, **args)
