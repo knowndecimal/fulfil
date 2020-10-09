@@ -50,6 +50,13 @@ module Fulfil
       parse(results: results)
     end
 
+    def post(model:, body: {})
+      uri = URI(model_url(model: model))
+
+      results = request(verb: :post, endpoint: uri, json: body)
+      parse(results: results)
+    end
+
     private
 
     def parse(result: nil, results: [])
@@ -67,7 +74,7 @@ module Fulfil
     def request(verb: :get, endpoint:, **args)
       response = client.request(verb, endpoint, args)
 
-      if response.status.ok?
+      if response.status.ok? || response.status.created?
         response.parse
       elsif response.code == 401
         raise StandardError, "Not authorized"
