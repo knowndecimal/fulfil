@@ -1,3 +1,7 @@
+## 0.4.1
+
+* @cdmwebs screwed up the release process, so this is a tiny bump to fix. No code changes.
+
 ## 0.4.0
 
 * Add `Client#count` and `Model#count`.
