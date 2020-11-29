@@ -59,8 +59,8 @@ module Fulfil
       parse(results: results)
     end
 
-    def put(model:, id:, body: {})
-      uri = URI(model_url(model: model, id: id))
+    def put(model:, id:, endpoint: nil, body: {})
+      uri = URI(model_url(model: model, id: id, endpoint: endpoint))
 
       result = request(verb: :put, endpoint: uri, json: body)
       parse(result: result)
@@ -88,8 +88,8 @@ module Fulfil
       "https://#{@subdomain}.fulfil.io/api/v2/model"
     end
 
-    def model_url(model:, id: nil)
-      [base_url, model, id].compact.join('/')
+    def model_url(model:, id: nil, endpoint: nil)
+      [base_url, model, id, endpoint].compact.join('/')
     end
 
     def request(verb: :get, endpoint:, **args)
