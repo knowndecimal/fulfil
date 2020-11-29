@@ -1,3 +1,9 @@
+## 0.4.2
+
+* Raise an `UnhandledTypeError` and reveal the offender.
+* Convert timedelta data types to Decimals.
+* Don't use `.present?` to check if response is a Hash.
+
 ## 0.4.1
 
 * @cdmwebs screwed up the release process, so this is a tiny bump to fix. No code changes.
