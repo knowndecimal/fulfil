@@ -1,3 +1,7 @@
+## 0.4.0
+
+* Add `Client#count` and `Model#count`.
+
 ## 0.3.0
 
 * Add basic write support via `Fulfil::Client#post` and `Fulfil::Client#put`.
