@@ -52,6 +52,13 @@ module Fulfil
       parse(results: results)
     end
 
+    def count(model:, domain:)
+      uri = URI("#{model_url(model: model)}/search_count")
+      body = [domain]
+
+      request(verb: :put, endpoint: uri, json: body)
+    end
+
     def post(model:, body: {})
       uri = URI(model_url(model: model))
 
