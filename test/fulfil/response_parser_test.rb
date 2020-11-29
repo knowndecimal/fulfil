@@ -44,4 +44,17 @@ class ResponseParserTest < Minitest::Test
 
     assert_equal @expected, result
   end
+
+  def test_unhandled_type
+    bad_value = {
+      "unknowndatatype" => {
+        "__class__" => "unknown",
+        "decimal" => 100.00,
+      }
+    }
+
+    assert_raises 'Fulfil::ResponseParser::UnhandledTypeError' do
+      Fulfil::ResponseParser.parse(item: bad_value)
+    end
+  end
 end

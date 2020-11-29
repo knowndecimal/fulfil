@@ -1,5 +1,14 @@
 module Fulfil
   module ResponseParser
+    class UnhandledTypeError < StandardError
+      attr_reader :value
+
+      def initialize(msg, value)
+        @value = value
+        super(msg)
+      end
+    end
+
     # Handle value objects, for example:
     #
     # "order_date": {
@@ -22,7 +31,10 @@ module Fulfil
       when 'Decimal'
         value.dig('decimal').to_f
       else
-        raise UnhandledTypeError, value
+        raise UnhandledTypeError.new(
+          "received a value that we don't know how to handle: #{json_class}",
+          json_class
+        )
       end
     end
 
