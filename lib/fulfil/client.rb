@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'http'
 require 'logger'
 require 'fulfil/response_parser'
@@ -50,9 +52,35 @@ module Fulfil
       parse(results: results)
     end
 
+    def post(model:, body: {})
+      uri = URI(model_url(model: model))
+
+      results = request(verb: :post, endpoint: uri, json: body)
+      parse(results: results)
+    end
+
+    def put(model:, id:, endpoint: nil, body: {})
+      uri = URI(model_url(model: model, id: id, endpoint: endpoint))
+
+      result = request(verb: :put, endpoint: uri, json: body)
+      parse(result: result)
+    end
+
     private
 
     def parse(result: nil, results: [])
+      if result.present?
+        parse_single(result: result)
+      else
+        parse_multiple(results: results)
+      end
+    end
+
+    def parse_single(result:)
+      Fulfil::ResponseParser.parse(item: result)
+    end
+
+    def parse_multiple(results:)
       results.map { |result| Fulfil::ResponseParser.parse(item: result) }
     end
 
@@ -60,26 +88,30 @@ module Fulfil
       "https://#{@subdomain}.fulfil.io/api/v2/model"
     end
 
-    def model_url(model:)
-      [base_url, model].join('/')
+    def model_url(model:, id: nil, endpoint: nil)
+      [base_url, model, id, endpoint].compact.join('/')
     end
 
     def request(verb: :get, endpoint:, **args)
       response = client.request(verb, endpoint, args)
 
-      if response.status.ok?
+      if response.status.ok? || response.status.created?
         response.parse
       elsif response.code == 401
-        raise StandardError, "Not authorized"
+        raise StandardError, 'Not authorized'
       else
-        pp response.parse
-        raise StandardError, "Invalid response"
+        puts response.body.to_s
+        raise Error, 'Error encountered while processing response:'
       end
-    rescue HTTP::ConnectionError => ex
+    rescue HTTP::Error => e
+      puts e
+      raise Error, 'Unhandled HTTP error encountered'
+    rescue HTTP::ConnectionError => e
       puts "Couldn't connect"
       raise Error, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => ex
       raise Error, "Can't process response: #{ex}"
+      []
     end
 
     def client
