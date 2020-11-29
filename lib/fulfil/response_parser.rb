@@ -28,7 +28,7 @@ module Fulfil
       when 'datetime'
         time = value.dig('iso_string')
         DateTime.parse(time)
-      when 'Decimal'
+      when 'Decimal', 'timedelta'
         value.dig('decimal').to_f
       else
         raise UnhandledTypeError.new(
