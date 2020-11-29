@@ -1,3 +1,7 @@
+## 0.3.0
+
+* Add basic write support via `Fulfil::Client#post` and `Fulfil::Client#put`.
+
 ## 0.2.0
 
 - Make token optional and allow specifying headers at least for enabling authentication via 'X-API-KEY' header

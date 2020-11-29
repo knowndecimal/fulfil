@@ -68,6 +68,38 @@ pp sales
 #   "rec_name"=>""}]
 ```
 
+### Writing
+
+As of v0.3.0, we've added very basic support for creates and updates via
+`Fulfil::Client#post` and `Fulfil::Client#put`.
+
+*Create Example*
+
+```ruby
+fulfil = Fulfil::Client.new
+
+sale_model = Fulfil::Model.new(client: fulfil, model_name: 'sale.sale')
+
+sale = {
+  # Full Sale attributes here
+}
+
+fulfil.post(model: sale_model, body: sale)
+```
+
+*Update Example*
+
+```ruby
+fulfil = Fulfil::Client.new
+
+sale_model = Fulfil::Model.new(client: fulfil, model_name: 'sale.sale')
+sale = sale_model.find(id: 1234)
+
+sale['channel'] = 4
+
+fulfil.put(model: sale_model, body: sale)
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
