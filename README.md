@@ -68,6 +68,16 @@ pp sales
 #   "rec_name"=>""}]
 ```
 
+### Count
+
+```ruby
+client = Fulfil::Client.new
+model = Fulfil::Model.new(client: client, model_name: 'stock.shipment.out')
+model.count(domain: [['shipping_batch.state', '=', 'open']])
+
+# Returns 7440
+```
+
 ### Writing
 
 As of v0.3.0, we've added very basic support for creates and updates via

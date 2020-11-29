@@ -36,6 +36,10 @@ module Fulfil
       )
     end
 
+    def count(domain:)
+      @client.count(model: model_name, domain: domain)
+    end
+
     def all
       search(domain: query)
     end
