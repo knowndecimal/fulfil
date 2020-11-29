@@ -76,7 +76,7 @@ module Fulfil
     private
 
     def parse(result: nil, results: [])
-      if result.present?
+      if result
         parse_single(result: result)
       else
         parse_multiple(results: results)
