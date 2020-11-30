@@ -10,6 +10,11 @@ module Fulfil
   OAUTH_TOKEN = ENV['FULFIL_TOKEN']
 
   class Client
+    class NotAuthorizedError < StandardError; end
+    class UnknownHTTPError < StandardError; end
+    class ConnectionError < StandardError; end
+    class ResponseError < StandardError; end
+
     def initialize(subdomain: SUBDOMAIN, token: OAUTH_TOKEN, headers: { 'X-API-KEY' => API_KEY }, debug: false)
       @subdomain = subdomain
       @token = token
@@ -105,19 +110,20 @@ module Fulfil
       if response.status.ok? || response.status.created?
         response.parse
       elsif response.code == 401
-        raise StandardError, 'Not authorized'
+        error = response.parse
+        raise NotAuthorizedError, "Not authorized: #{error['error']}: #{error['error_description']}"
       else
         puts response.body.to_s
         raise Error, 'Error encountered while processing response:'
       end
     rescue HTTP::Error => e
       puts e
-      raise Error, 'Unhandled HTTP error encountered'
+      raise UnknownHTTPError, 'Unhandled HTTP error encountered'
     rescue HTTP::ConnectionError => e
       puts "Couldn't connect"
-      raise Error, "Can't connect to #{base_url}"
+      raise ConnectionError, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => ex
-      raise Error, "Can't process response: #{ex}"
+      raise ResponseError, "Can't process response: #{ex}"
       []
     end
 
