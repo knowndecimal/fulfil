@@ -1,3 +1,8 @@
+## 0.4.3
+
+* Add Client errors for more granular handling.
+* Send along info when a `NotAuthorizedError` is raised.
+
 ## 0.4.2
 
 * Raise an `UnhandledTypeError` and reveal the offender.
