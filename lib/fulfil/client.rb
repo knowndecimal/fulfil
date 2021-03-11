@@ -74,7 +74,7 @@ module Fulfil
       parse(results: results)
     end
 
-    def put(model:, id: nil, endpoint: nil, body: {})
+    def put(model: nil, id: nil, endpoint: nil, body: {})
       uri = URI(model_url(model: model, id: id, endpoint: endpoint))
 
       result = request(verb: :put, endpoint: uri, json: body)
@@ -85,6 +85,12 @@ module Fulfil
       uri = URI(model_url(model: model, id: id))
 
       result = request(verb: :delete, endpoint: uri)
+      parse(result: result)
+    end
+
+    def interactive_report(endpoint:, body: nil)
+      uri = URI("#{base_url}/model/#{endpoint}")
+      result = request(verb: :put, endpoint: uri, json: body)
       parse(result: result)
     end
 
@@ -106,8 +112,12 @@ module Fulfil
       results.map { |result| Fulfil::ResponseParser.parse(item: result) }
     end
 
+    def domain
+      "https://#{@subdomain}.fulfil.io"
+    end
+
     def base_url
-      "https://#{@subdomain}.fulfil.io/api/v2/model"
+      [domain, 'api', 'v2'].join('/')
     end
 
     def model_url(model:, id: nil, endpoint: nil)
