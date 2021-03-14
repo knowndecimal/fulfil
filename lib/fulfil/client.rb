@@ -10,6 +10,11 @@ module Fulfil
   OAUTH_TOKEN = ENV['FULFIL_TOKEN']
 
   class Client
+    class InvalidClientError < StandardError
+      def message
+        'Client is not configured correctly.'
+      end
+    end
 
     class NotAuthorizedError < StandardError; end
 
@@ -25,6 +30,16 @@ module Fulfil
       @debug = debug
       @headers = headers
       @headers.delete('X-API-KEY') if @token
+
+      raise InvalidClientError if invalid?
+    end
+
+    def invalid?
+      @subdomain.nil? || @subdomain.empty?
+    end
+
+    def valid?
+      !invalid?
     end
 
     def find(model:, ids: [], id: nil, fields: %w[id rec_name])
@@ -126,6 +141,8 @@ module Fulfil
     end
 
     def request(endpoint:, verb: :get, **args)
+      raise InvalidClientError if invalid?
+
       response = client.request(verb, endpoint, args)
 
       if response.status.ok? || response.status.created?
