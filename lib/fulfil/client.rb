@@ -10,6 +10,7 @@ module Fulfil
   OAUTH_TOKEN = ENV['FULFIL_TOKEN']
 
   class Client
+
     class NotAuthorizedError < StandardError; end
 
     class UnknownHTTPError < StandardError; end
