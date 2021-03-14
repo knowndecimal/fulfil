@@ -8,3 +8,5 @@ Minitest::Reporters.use!(Minitest::Reporters::SpecReporter.new)
 
 require 'minitest/ci' if ENV['CI']
 require 'minitest/autorun'
+
+require 'webmock/minitest'
