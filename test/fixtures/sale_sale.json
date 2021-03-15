@@ -1,0 +1,247 @@
+{
+  "total_amount" : {
+    "decimal" : "60.00",
+    "__class__" : "Decimal"
+  },
+  "tax_amount_cache" : {
+    "__class__" : "Decimal",
+    "decimal" : "0"
+  },
+  "total_quantity" : 1,
+  "currency_digits" : 2,
+  "untaxed_amount" : {
+    "decimal" : "60.00",
+    "__class__" : "Decimal"
+  },
+  "shipments" : [
+    81292
+  ],
+  "promotion" : null,
+  "shipping_cost_computation" : "channel",
+  "exceptions" : [],
+  "shipment_amount_invoiced" : {
+    "decimal" : "10.00",
+    "__class__" : "Decimal"
+  },
+  "credit" : {
+    "decimal" : "59.00",
+    "__class__" : "Decimal"
+  },
+  "untaxed_amount_cache" : {
+    "decimal" : "60.00",
+    "__class__" : "Decimal"
+  },
+  "access_token" : null,
+  "currency" : 172,
+  "invoices_recreated" : [],
+  "total_amount_cache" : {
+    "__class__" : "Decimal",
+    "decimal" : "60.00"
+  },
+  "payment_collected" : {
+    "decimal" : "60.00",
+    "__class__" : "Decimal"
+  },
+  "has_line_with_discount" : false,
+  "amount_invoiced" : {
+    "__class__" : "Decimal",
+    "decimal" : "60.00"
+  },
+  "requested_shipping_service" : null,
+  "external_url" : "",
+  "shipment_cost_method" : "shipment_capped",
+  "private_notes" : [],
+  "invoice_state" : "paid",
+  "payment_term" : 1,
+  "warehouse" : 4,
+  "shipment_returns" : [],
+  "payment_captured" : {
+    "__class__" : "Decimal",
+    "decimal" : "60.00"
+  },
+  "invoice_address" : 284163,
+  "confirmation_time" : {
+    "microsecond" : 0,
+    "minute" : 17,
+    "hour" : 20,
+    "day" : 18,
+    "year" : 2018,
+    "__class__" : "datetime",
+    "month" : 4,
+    "iso_string" : "2018-04-18T20:17:52",
+    "second" : 52
+  },
+  "total_amount_cpny_ccy_cache" : {
+    "__class__" : "Decimal",
+    "decimal" : "60.00"
+  },
+  "has_channel_exception" : false,
+  "carrier_service" : null,
+  "create_date" : {
+    "__class__" : "datetime",
+    "day" : 18,
+    "year" : 2018,
+    "iso_string" : "2018-04-18T20:20:13.862082",
+    "month" : 4,
+    "second" : 13,
+    "minute" : 20,
+    "microsecond" : 862082,
+    "hour" : 20
+  },
+  "payment_processing_state" : null,
+  "weight" : 0.8,
+  "channel_identifier" : "R230530021",
+  "shipment_method" : "order",
+  "messages" : [],
+  "weight_digits" : 2,
+  "state" : "done",
+  "price_list" : 1,
+  "tsv" : null,
+  "drop_shipments" : [],
+  "currency_symbol" : "$",
+  "public_notes" : [],
+  "payment_total" : {
+    "decimal" : "60.0",
+    "__class__" : "Decimal"
+  },
+  "acknowledgement_status" : null,
+  "sorted_payments" : [
+    12693
+  ],
+  "shipping_start_date" : null,
+  "channel" : 3,
+  "description" : null,
+  "priority" : "2",
+  "weight_uom" : 5,
+  "shipment_amount" : {
+    "decimal" : "10.00",
+    "__class__" : "Decimal"
+  },
+  "total_shipment_cost" : {
+    "__class__" : "Decimal",
+    "decimal" : "10.0"
+  },
+  "gateway_transactions" : [
+    12054
+  ],
+  "weight_uom_symbol" : "lb",
+  "write_date" : {
+    "day" : 19,
+    "year" : 2018,
+    "__class__" : "datetime",
+    "iso_string" : "2018-04-19T20:59:47.355847",
+    "month" : 4,
+    "second" : 47,
+    "microsecond" : 355847,
+    "minute" : 59,
+    "hour" : 20
+  },
+  "available_carrier_services" : [
+    170,
+    162
+  ],
+  "moves" : [
+    348377
+  ],
+  "invoice_method" : "shipment",
+  "carrier_cost_method" : "dhl_express",
+  "invoices" : [
+    153821
+  ],
+  "total_quantity_uom" : "u",
+  "shipment_state" : "sent",
+  "company_currency_digits" : 2,
+  "acknowledged_at" : null,
+  "has_return" : false,
+  "payment_authorized" : {
+    "decimal" : "0",
+    "__class__" : "Decimal"
+  },
+  "shipping_instructions" : null,
+  "sale_date" : {
+    "iso_string" : "2018-04-18",
+    "month" : 4,
+    "__class__" : "date",
+    "day" : 18,
+    "year" : 2018
+  },
+  "create_uid" : 25,
+  "reference" : "R230530021",
+  "guest_access_code" : "a89b35fe-3653-4628-9528-c91e4acba34d",
+  "carrier" : 6,
+  "drop_location" : 10,
+  "rec_blurb" : {
+    "title" : "SO79797 (R230530021)",
+    "subtitle" : [
+      [
+        "Date",
+        "2018-04-18"
+      ],
+      [
+        "Total",
+        "$60.00"
+      ]
+    ],
+    "description" : null,
+    "id" : 213112
+  },
+  "attachments" : [],
+  "party_lang" : "en_US",
+  "payment_available" : {
+    "__class__" : "Decimal",
+    "decimal" : "0.00"
+  },
+  "is_recently_active" : false,
+  "sales_person" : null,
+  "channel_type" : "manual",
+  "tax_amount" : {
+    "__class__" : "Decimal",
+    "decimal" : "0"
+  },
+  "origin" : null,
+  "channel_tax_amount" : null,
+  "party" : 118637,
+  "metadata" : null,
+  "company" : 1,
+  "payments" : [
+    12693
+  ],
+  "shipping_end_date" : null,
+  "id" : 213112,
+  "last_modification" : {
+    "second" : 47,
+    "month" : 4,
+    "iso_string" : "2018-04-19T20:59:47",
+    "year" : 2018,
+    "day" : 19,
+    "__class__" : "datetime",
+    "hour" : 20,
+    "minute" : 59,
+    "microsecond" : 0
+  },
+  "shipment_address" : 284163,
+  "payment_authorize_on" : "manual",
+  "write_uid" : 60,
+  "tax_amount_cpny_ccy_cache" : {
+    "__class__" : "Decimal",
+    "decimal" : "0"
+  },
+  "number" : "SO79797",
+  "payment_capture_on" : "manual",
+  "untaxed_amount_cpny_ccy_cache" : {
+    "decimal" : "60.00",
+    "__class__" : "Decimal"
+  },
+  "invoices_ignored" : [],
+  "lines" : [
+    217937,
+    217938
+  ],
+  "gift_message" : " ",
+  "shipment_party" : null,
+  "gift_card_method" : "invoice",
+  "comment" : "Order adjustments: Shipping",
+  "is_cart" : false,
+  "rec_name" : "SO79797 (R230530021)",
+  "is_international_shipping" : true
+}
