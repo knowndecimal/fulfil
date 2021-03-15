@@ -134,6 +134,39 @@ release a new version, update the version number in `version.rb`, and then run
 `bundle exec rake release`, which will create a git tag for the version, push
 git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
+### Testing
+
+For non-client tests, create the test class or case.
+
+For client tests, you'll need to add a couple steps. If running against a real
+backend, you'll need to provide a couple of environment variables:
+`FULFIL_SUBDOMAIN` and `FULFIL_TOKEN`. Additionally, pass `debug: true` to the
+client instance in the test. This will output the response body. Webmock will
+probably complain that real requests aren't allowed at this point, offering you
+the stub. We don't need most of that.
+
+We will need to capture the response body as JSON and store it in the
+`test/fixtures` directory. Formatted for readability, please. You'll also need
+to make note of the path and body of the request. Once you have that, you can
+generate your stub.
+
+To stub a request, use (or create) the helper method based on the verb. For
+example, to stub a `GET` request, use `stub_fulfil_get`. Here's an example:
+
+```ruby
+def test_find_one
+  stub_fulfil_get('sale.sale/213112', 'sale_sale')
+
+  client = Fulfil::Client.new
+  response = client.find_one(model: 'sale.sale', id: 213_112)
+
+  assert_equal 213_112, response['id']
+end
+```
+
+`stub_fulfil_get` takes two arguments: the URL path (after `/api/v2/model/`)
+and the fixture file name to be returned.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
