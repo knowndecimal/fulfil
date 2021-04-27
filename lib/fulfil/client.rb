@@ -153,8 +153,8 @@ module Fulfil
         error = response.parse
         raise NotAuthorizedError, "Not authorized: #{error['error']}: #{error['error_description']}"
       else
-        puts response.body.to_s
-        raise Error, 'Error encountered while processing response:'
+        error = response.parse
+        raise Error, "Error encountered while processing response: #{error['message']}"
       end
     rescue HTTP::Error => e
       puts e
