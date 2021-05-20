@@ -1,3 +1,7 @@
+## 0.4.4
+
+* Pin http dependency to ~> 4.4.0. 5.0+ introduces a frozen string error.
+
 ## 0.4.3
 
 * Add Client errors for more granular handling.
