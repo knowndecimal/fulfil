@@ -16,6 +16,14 @@ module Fulfil
       @client.find(model: model, id: id)
     end
 
+    def find_many(model: model_name, ids: [], fields: nil)
+      if fields.present?
+        @client.find(model: model, ids: ids, fields: fields)
+      else
+        @client.find(model: model, ids: ids)
+      end
+    end
+
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
     def search(
