@@ -1,3 +1,8 @@
+## 0.4.5
+
+* Add #delete to client.
+* Set up Dependabot on GitHub.
+
 ## 0.4.4
 
 * Pin http dependency to ~> 4.4.0. 5.0+ introduces a frozen string error.
