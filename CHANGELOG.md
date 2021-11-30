@@ -1,3 +1,7 @@
+## 0.4.8
+
+* Feature: Allow more params with InteractiveReport.
+
 ## 0.4.7
 
 * Bugfix: Accidentally removed the model parameter from the URL.
