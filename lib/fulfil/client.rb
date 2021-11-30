@@ -121,7 +121,7 @@ module Fulfil
     end
 
     def model_url(model:, id: nil, endpoint: nil)
-      [base_url, model, id, endpoint].compact.join('/')
+      [base_url, 'model', model, id, endpoint].compact.join('/')
     end
 
     def request(endpoint:, verb: :get, **args)
