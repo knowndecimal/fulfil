@@ -1,3 +1,7 @@
+## 0.4.7
+
+* Bugfix: Accidentally removed the model parameter from the URL.
+
 ## 0.4.6
 
 * Add InteractiveReport support.
