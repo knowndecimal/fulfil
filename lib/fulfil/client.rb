@@ -78,6 +78,13 @@ module Fulfil
       parse(result: result)
     end
 
+    def delete(model:, id:)
+      uri = URI(model_url(model: model, id: id))
+
+      result = request(verb: :delete, endpoint: uri)
+      parse(result: result)
+    end
+
     private
 
     def parse(result: nil, results: [])
@@ -109,6 +116,8 @@ module Fulfil
 
       if response.status.ok? || response.status.created?
         response.parse
+      elsif response.code == 204
+        []
       elsif response.code == 401
         error = response.parse
         raise NotAuthorizedError, "Not authorized: #{error['error']}: #{error['error_description']}"
