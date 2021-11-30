@@ -11,8 +11,11 @@ module Fulfil
 
   class Client
     class NotAuthorizedError < StandardError; end
+
     class UnknownHTTPError < StandardError; end
+
     class ConnectionError < StandardError; end
+
     class ResponseError < StandardError; end
 
     def initialize(subdomain: SUBDOMAIN, token: OAUTH_TOKEN, headers: { 'X-API-KEY' => API_KEY }, debug: false)
@@ -111,7 +114,7 @@ module Fulfil
       [base_url, model, id, endpoint].compact.join('/')
     end
 
-    def request(verb: :get, endpoint:, **args)
+    def request(endpoint:, verb: :get, **args)
       response = client.request(verb, endpoint, args)
 
       if response.status.ok? || response.status.created?
@@ -131,8 +134,8 @@ module Fulfil
     rescue HTTP::ConnectionError => e
       puts "Couldn't connect"
       raise ConnectionError, "Can't connect to #{base_url}"
-    rescue HTTP::ResponseError => ex
-      raise ResponseError, "Can't process response: #{ex}"
+    rescue HTTP::ResponseError => e
+      raise ResponseError, "Can't process response: #{e}"
       []
     end
 
