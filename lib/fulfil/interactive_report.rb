@@ -5,13 +5,20 @@ module Fulfil
       @report = report
     end
 
-    def execute(start_date:, end_date:)
+    def execute(**params)
+      body = {}
+
+      params.each do |key, value|
+        body[key] = if value.is_a?(Date)
+                      serialize_date(value)
+                    else
+                      value
+                    end
+      end
+
       @client.interactive_report(
         endpoint: report_url,
-        body: [{
-          start_date: serialize_date(start_date),
-          end_date: serialize_date(end_date)
-        }]
+        body: [body]
       )
     end
 
