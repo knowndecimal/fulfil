@@ -74,7 +74,7 @@ module Fulfil
       parse(results: results)
     end
 
-    def put(model:, id:, endpoint: nil, body: {})
+    def put(model:, id: nil, endpoint: nil, body: {})
       uri = URI(model_url(model: model, id: id, endpoint: endpoint))
 
       result = request(verb: :put, endpoint: uri, json: body)
