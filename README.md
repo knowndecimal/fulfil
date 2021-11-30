@@ -109,6 +109,19 @@ sale['channel'] = 4
 
 fulfil.put(model: sale_model, body: sale)
 ```
+### Interactive Reports
+
+As of v0.4.6, interactive report support exists in a basic form.
+You're able to execute reports with basic params. Responses are
+transformed to JSON structures.
+
+```ruby
+fulfil = Fulfil::Client.new
+
+report = Fulfil::Report.new(client: fulfil, report_name: 'account.tax.summary.ireport')
+
+report.execute(start_date: Date.new(2020, 12, 1), end_date: Date.new(2020, 12, 31))
+```
 
 ## Development
 

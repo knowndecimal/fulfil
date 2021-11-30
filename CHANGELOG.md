@@ -1,3 +1,7 @@
+## 0.4.6
+
+* Add InteractiveReport support.
+
 ## 0.4.5
 
 * Add #delete to client.
