@@ -41,7 +41,7 @@ module Fulfil
     def self.group(key_value_tuples)
       key_value_tuples
         .group_by { |kv_tuple| kv_tuple[0][0] }
-        .map { |group_key, kv_tuples|
+        .map do |group_key, kv_tuples|
         if kv_tuples.length == 1
           [group_key, mapped_value_field(value: kv_tuples[0][1])]
         else
@@ -49,7 +49,7 @@ module Fulfil
           attrs = kv_tuples[1..-1].map { |tuple| [tuple[0][1..-1], tuple[1]] }
           [group_key, [['id', id[1]]].concat(group(attrs)).to_h]
         end
-      }
+      end
     end
 
     def self.parse(item:)
@@ -57,5 +57,4 @@ module Fulfil
       group(key_value_tuples).to_h
     end
   end
-
 end
