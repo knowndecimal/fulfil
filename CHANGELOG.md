@@ -1,3 +1,7 @@
+## 0.4.9
+
+* Add client tests and stub with Webmock.
+
 ## 0.4.8
 
 * Feature: Allow more params with InteractiveReport.
