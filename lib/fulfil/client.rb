@@ -144,18 +144,9 @@ module Fulfil
       raise InvalidClientError if invalid?
 
       response = client.request(verb, endpoint, args)
+      Fulfil::ResponseHandler.new(response).verify!
 
-      if response.status.ok? || response.status.created?
-        response.parse
-      elsif response.code == 204
-        []
-      elsif response.code == 401
-        error = response.parse
-        raise NotAuthorizedError, "Not authorized: #{error['error']}: #{error['error_description']}"
-      else
-        error = response.parse
-        raise Error, "Error encountered while processing response: #{error['message']}"
-      end
+      response.parse
     rescue HTTP::Error => e
       puts e
       raise UnknownHTTPError, 'Unhandled HTTP error encountered'
