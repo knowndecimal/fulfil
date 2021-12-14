@@ -6,10 +6,10 @@ module Fulfil
   # exception that the consumer can catch.
   #
   # @example
-  #   Fulfil::ResponseHandler.new(@response).parse!
+  #   Fulfil::ResponseHandler.new(@response).verify!
   #   => { id: 100 }
   #
-  #   Fulfil::ResponseHandler.new(@response).parse!
+  #   Fulfil::ResponseHandler.new(@response).verify!
   #   => Fulfil::Error::BadRequest
   class ResponseHandler
     HTTP_ERROR_CODES = {
@@ -30,8 +30,8 @@ module Fulfil
       @status_code = response.code
     end
 
-    def parse!
-      return response_body unless HTTP_ERROR_CODES.key?(@status_code)
+    def verify!
+      return true unless HTTP_ERROR_CODES.key?(@status_code)
 
       raise HTTP_ERROR_CODES[@status_code].new(
         response_body['error_description'],

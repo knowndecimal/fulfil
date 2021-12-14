@@ -44,14 +44,14 @@ class ResponseHandlerTest < Minitest::Test
     if Fulfil::ResponseHandler::HTTP_ERROR_CODES.key?(status_code)
       define_method(:"test_http_status_code_#{status_code}_raises_exception") do
         error_message = assert_raises Fulfil::ResponseHandler::HTTP_ERROR_CODES[status_code] do
-          Fulfil::ResponseHandler.new(response).parse!
+          Fulfil::ResponseHandler.new(response).verify!
         end
 
         assert_kind_of Fulfil::HttpError, error_message
       end
     else
       define_method(:"test_http_status_code_#{status_code}_raises_no_exception") do
-        assert Fulfil::ResponseHandler.new(response).parse!
+        assert Fulfil::ResponseHandler.new(response).verify!
       end
     end
   end
