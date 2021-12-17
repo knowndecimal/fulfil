@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+VERSION=$1
+
+# Use the latest dependencies for the new gem version.
+bundle
+
+# Update the gem version.
+printf "# frozen_string_literal: true\n\nmodule Fulfil\n  VERSION = \"$VERSION\"\nend\n" > ./lib/fulfil/version.rb
+git add lib/fulfil/version.rb
+git commit -m "Bump version for v$VERSION"
+git push origin master
+
+# Tag the new gem version.
+git tag v$VERSION
+git push --tags
+
+# Build the new gem and publish it to Rubygems.
+gem build fulfil.gemspec
+gem push "fulfil-io-$VERSION.gem" --host https://rubygems.org
+rm "fulfil-io-$VERSION.gem"
