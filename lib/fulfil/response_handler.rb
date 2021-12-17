@@ -7,7 +7,7 @@ module Fulfil
   #
   # @example
   #   Fulfil::ResponseHandler.new(@response).verify!
-  #   => { id: 100 }
+  #   => true
   #
   #   Fulfil::ResponseHandler.new(@response).verify!
   #   => Fulfil::Error::BadRequest
@@ -31,9 +31,9 @@ module Fulfil
     end
 
     def verify!
-      return true unless HTTP_ERROR_CODES.key?(@status_code)
+      return true unless @status_code >= 400
 
-      raise HTTP_ERROR_CODES[@status_code].new(
+      raise HTTP_ERROR_CODES.fetch(@status_code, Fulfil::HttpError).new(
         response_body['error_description'],
         {
           body: @response.body,
@@ -44,18 +44,6 @@ module Fulfil
     end
 
     private
-
-    def check_http_status(status_code)
-      return unless status_code >= 400
-
-      raise HTTP_ERROR_CODES.fetch(status_code, Fulfil::HttpError),
-            response_body['error_description'],
-            metadata: {
-              body: @response.body,
-              headers: @response.headers,
-              status: @response.status
-            }
-    end
 
     def response_body
       @response_body ||= @response.parse

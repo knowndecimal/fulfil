@@ -3,7 +3,7 @@
 module Fulfil
   class Error < StandardError; end
 
-  # The `Fulfil::HttpError` is raised whenever an API request returns a non-200 HTTP status code.
+  # The `Fulfil::HttpError` is raised whenever an API request returns a 400+ HTTP status code.
   # See `Fulfil::ResponseHandler` for more information.
   class HttpError < Error
     attr_reader :metadata
