@@ -51,7 +51,7 @@ class ResponseHandlerTest < Minitest::Test
 
       define_method(:"test_http_status_code_#{status_code}_raises_exception") do
         error_message = assert_raises expected_exception do
-          Fulfil::ResponseHandler.new(response).parse!
+          Fulfil::ResponseHandler.new(response).verify!
         end
 
         assert_kind_of Fulfil::HttpError, error_message
