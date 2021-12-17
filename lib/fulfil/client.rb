@@ -7,7 +7,6 @@ require 'fulfil/response_parser'
 module Fulfil
   SUBDOMAIN = ENV['FULFIL_SUBDOMAIN']
   API_KEY = ENV['FULFIL_API_KEY']
-  OAUTH_TOKEN = ENV['FULFIL_TOKEN']
 
   class Client
     class InvalidClientError < StandardError
@@ -24,7 +23,7 @@ module Fulfil
 
     class ResponseError < StandardError; end
 
-    def initialize(subdomain: SUBDOMAIN, token: OAUTH_TOKEN, headers: { 'X-API-KEY' => API_KEY }, debug: false)
+    def initialize(subdomain: SUBDOMAIN, token: oauth_token, headers: { 'X-API-KEY' => API_KEY }, debug: false)
       @subdomain = subdomain
       @token = token
       @debug = debug
@@ -111,6 +110,15 @@ module Fulfil
     end
 
     private
+
+    def oauth_token
+      if ENV['FULFIL_TOKEN']
+        puts "You're using an deprecated environment variable. Please update your " \
+              'FULFIL_TOKEN to FULFIL_OAUTH_TOKEN.'
+      end
+
+      ENV['FULFIL_OAUTH_TOKEN'] || ENV['FULFIL_TOKEN']
+    end
 
     def parse(result: nil, results: [])
       if result
