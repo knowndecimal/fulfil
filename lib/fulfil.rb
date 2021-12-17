@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'fulfil/version'
-require 'fulfil/errors'
+require 'fulfil/error'
 require 'fulfil/client'
 require 'fulfil/model'
 require 'fulfil/interactive_report'
