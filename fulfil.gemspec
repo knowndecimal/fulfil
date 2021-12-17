@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'oauth2', '~> 1.4'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'webmock'
+  spec.add_development_dependency 'dotenv', '~> 2.7', '>= 2.7.6'
 end
