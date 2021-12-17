@@ -14,23 +14,27 @@ gem 'fulfil-io', require: 'fulfil'
 
 And then execute:
 
-    $ bundle install
+```shell
+  $ bundle install
+```
 
 Or install it yourself as:
 
-    $ gem install fulfil-io
+```shell
+  $ gem install fulfil-io
+```
 
 ## Usage
 
 Environment variables:
 
-- FULFIL_SUBDOMAIN - required to be set.
-- FULFIL_TOKEN - required for oauth bearer authentication
-- FULFIL_API_KEY - required for authentication via the X-API-KEY request header
+- **FULFIL_SUBDOMAIN:** - always required to use the gem.
+- **FULFIL_OAUTH_TOKEN:** required for oauth bearer authentication
+- **FULFIL_API_KEY:** required for authentication via the `X-API-KEY` request header
 
-**Note:** When FULFIL_TOKEN is present, the FULFIL_API_KEY will be ignored. So,
+> **Note:** When `FULFIL_OAUTH_TOKEN` is present, the `FULFIL_API_KEY` will be ignored. So,
 if oauth doesn't work, returning an Unauthorized error, to use the
-FULFIL_API_KEY, the FULFIL_TOKEN shouldn't be specified.
+`FULFIL_API_KEY`, the `FULFIL_OAUTH_TOKEN` shouldn't be specified.
 
 ```ruby
 require 'fulfil' # this is necessary only in case of running without bundler
@@ -145,7 +149,7 @@ For non-client tests, create the test class or case.
 
 For client tests, you'll need to add a couple steps. If running against a real
 backend, you'll need to provide a couple of environment variables:
-`FULFIL_SUBDOMAIN` and `FULFIL_TOKEN`. Additionally, pass `debug: true` to the
+`FULFIL_SUBDOMAIN` and `FULFIL_OAUTH_TOKEN`. Additionally, pass `debug: true` to the
 client instance in the test. This will output the response body. Webmock will
 probably complain that real requests aren't allowed at this point, offering you
 the stub. We don't need most of that.
