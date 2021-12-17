@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
+require 'dotenv/load'
 require 'bundler/setup'
+
 require 'fulfil'
 
 def fulfil
   @fulfil ||= Fulfil::Client.new(
-    subdomain: ENV.fetch('SUBDOMAIN'), token: ENV.fetch('TOKEN')
+    subdomain: ENV.fetch('FULFIL_SUBDOMAIN'), token: ENV.fetch('FULFIL_OAUTH_TOKEN')
   )
 end
 

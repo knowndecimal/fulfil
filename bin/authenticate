@@ -1,17 +1,16 @@
 #!/usr/bin/env ruby
-
 # frozen_string_literal: true
 
-require 'bundler'
-Bundler.setup(:default, :development)
+require 'dotenv/load'
+require 'bundler/setup'
 
-require 'oauth2'
 require 'fulfil'
+require 'oauth2'
 
 def get_token
-  client_id = ENV.fetch('CLIENT_ID')
-  client_secret = ENV.fetch('CLIENT_SECRET')
-  subdomain = ENV.fetch('SUBDOMAIN')
+  client_id = ENV.fetch('FULFIL_CLIENT_ID')
+  client_secret = ENV.fetch('FULFIL_CLIENT_SECRET')
+  subdomain = ENV.fetch('FULFIL_SUBDOMAIN')
 
   base_url = "https://#{subdomain}.fulfil.io" # "oauth/authorize"
 
@@ -47,7 +46,7 @@ end
 
 def fulfil
   @fulfil ||= Fulfil::Client.new(
-    subdomain: ENV.fetch('SUBDOMAIN'), token: ENV.fetch('TOKEN')
+    subdomain: ENV.fetch('FULFIL_SUBDOMAIN'), token: ENV.fetch('FULFIL_OAUTH_TOKEN')
   )
 end
 
