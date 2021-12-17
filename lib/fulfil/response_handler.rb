@@ -45,6 +45,18 @@ module Fulfil
 
     private
 
+    def check_http_status(status_code)
+      return unless status_code >= 400
+
+      raise HTTP_ERROR_CODES.fetch(status_code, Fulfil::HttpError),
+            response_body['error_description'],
+            metadata: {
+              body: @response.body,
+              headers: @response.headers,
+              status: @response.status
+            }
+    end
+
     def response_body
       @response_body ||= @response.parse
     end

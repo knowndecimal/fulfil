@@ -41,10 +41,17 @@ class ResponseHandlerTest < Minitest::Test
     status_code = http_status_code.to_i
     response = ResponseMock.new(status_code: status_code)
 
-    if Fulfil::ResponseHandler::HTTP_ERROR_CODES.key?(status_code)
+    if status_code >= 400
+      expected_exception =
+        if Fulfil::ResponseHandler::HTTP_ERROR_CODES.key?(status_code)
+          Fulfil::ResponseHandler::HTTP_ERROR_CODES[status_code]
+        else
+          Fulfil::HttpError
+        end
+
       define_method(:"test_http_status_code_#{status_code}_raises_exception") do
-        error_message = assert_raises Fulfil::ResponseHandler::HTTP_ERROR_CODES[status_code] do
-          Fulfil::ResponseHandler.new(response).verify!
+        error_message = assert_raises expected_exception do
+          Fulfil::ResponseHandler.new(response).parse!
         end
 
         assert_kind_of Fulfil::HttpError, error_message
