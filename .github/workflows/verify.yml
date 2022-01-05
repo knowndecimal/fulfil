@@ -22,4 +22,4 @@ jobs:
 
       - name: Run all tests
         run: |
-          bundle exec rake test
+          bin/rake test
