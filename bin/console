@@ -1,11 +1,21 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
+require 'dotenv/load'
 require 'bundler/setup'
+
 require 'fulfil'
 
 def fulfil
+  oauth_token = ENV['FULFIL_OAUTH_TOKEN'] || ENV['FULFIL_TOKEN']
+
+  if ENV['FULFIL_TOKEN']
+    puts "You're using an deprecated environment variable. Please update your " \
+          'FULFIL_TOKEN to FULFIL_OAUTH_TOKEN.'
+  end
+
   @fulfil ||= Fulfil::Client.new(
-    subdomain: ENV.fetch('SUBDOMAIN'), token: ENV.fetch('TOKEN')
+    subdomain: ENV.fetch('FULFIL_SUBDOMAIN'), token: oauth_token
   )
 end
 

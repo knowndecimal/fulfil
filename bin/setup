@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 IFS=$'\n\t'
-set -vx
 
-bundle install
+echo "[Fulfil] Installing all dependencies."
+bundle install --quiet
 
-# Do any other automated setup that you need to do here
+# Setup the environment variables for local development.
+echo "[Fulfil] Setting up environment variables."
+cp .env.example .env

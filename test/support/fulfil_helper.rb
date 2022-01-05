@@ -61,7 +61,7 @@ module FulfilHelper
 
   def valid_request_headers_with_auth_token
     DEFAULT_HEADERS.merge(
-      'Authorization' => "Bearer #{ENV.fetch('FULFIL_API_TOKEN')}"
+      'Authorization' => "Bearer #{ENV.fetch('FULFIL_OAUTH_TOKEN')}"
     )
   end
 
