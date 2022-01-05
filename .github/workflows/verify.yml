@@ -22,4 +22,5 @@ jobs:
 
       - name: Run all tests
         run: |
+          cp .env.example .env
           bin/rake test
