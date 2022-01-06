@@ -1,4 +1,4 @@
-[![CI](https://github.com/knowndecimal/fulfil/actions/workflows/verify.yml/badge.svg)](https://github.com/knowndecimal/fulfil/actions/workflows/verify.yml)
+[![Tests](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml/badge.svg)](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml)
 
 # Fulfil.io Rubygem
 
