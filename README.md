@@ -1,3 +1,5 @@
+[![CI](https://github.com/knowndecimal/fulfil/actions/workflows/verify.yml/badge.svg)](https://github.com/knowndecimal/fulfil/actions/workflows/verify.yml)
+
 # Fulfil.io Rubygem
 
 A Ruby library for the [Fulfil.io](https://fulfil.io) API.
