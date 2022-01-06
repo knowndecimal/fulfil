@@ -5,8 +5,7 @@ require 'webmock/minitest'
 module FulfilHelper
   DEFAULT_HEADERS = {
     'Connection' => 'Keep-Alive',
-    'Host' => "#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io",
-    'User-Agent' => 'http.rb/4.4.1'
+    'Host' => "#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io"
   }.freeze
 
   def stub_fulfil_get(path, fixture, status_code = 200)
