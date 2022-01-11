@@ -167,12 +167,10 @@ module Fulfil
     end
 
     def client
-      return @client if defined?(@client)
-
-      @client = HTTP.use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
-      @client = @client.auth("Bearer #{@token}") if @token
-      @client = @client.headers(@headers)
-      @client
+      client = HTTP.use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
+      client = client.auth("Bearer #{@token}") if @token
+      client = client.headers(@headers)
+      client
     end
   end
 end
