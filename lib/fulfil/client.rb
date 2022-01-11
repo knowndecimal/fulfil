@@ -169,7 +169,7 @@ module Fulfil
     def client
       return @client if defined?(@client)
 
-      @client = HTTP.persistent(base_url).use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
+      @client = HTTP.use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
       @client = @client.auth("Bearer #{@token}") if @token
       @client = @client.headers(@headers)
       @client

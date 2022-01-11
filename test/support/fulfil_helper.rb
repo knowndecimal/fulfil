@@ -4,7 +4,6 @@ require 'webmock/minitest'
 
 module FulfilHelper
   DEFAULT_HEADERS = {
-    'Connection' => 'Keep-Alive',
     'Host' => "#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io"
   }.freeze
 
