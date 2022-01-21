@@ -28,8 +28,6 @@ module Fulfil
       requests_left.positive?
     end
 
-    private
-
     # Sets the maximum number of requests you're permitted to make per second.
     # @param value [String] The maximum number of requests per second.
     # @return [Integer] The maximum number of requests per second.
