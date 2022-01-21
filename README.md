@@ -127,6 +127,26 @@ report = Fulfil::Report.new(client: fulfil, report_name: 'account.tax.summary.ir
 report.execute(start_date: Date.new(2020, 12, 1), end_date: Date.new(2020, 12, 31))
 ```
 
+## Rate limits
+
+Fulfil's API applies rate limits to the API requests that it receives. Every request is subject to throttling under the general limits. In addition, there are resource-based rate limits and throttles.
+
+This gem exposes an API for checking your current rate limits (note: the gem only knows about the rate limit after a request to Fulfil's API has been made).
+
+Whenever you reached the rate limit, the `Fulfil::RateLimitExceeded` exception is being raised. You can use the information on the `Fulfil.rate_limit` to find out what to do next.
+
+```ruby
+$ Fulfil.rate_limit.requests_left? # or use Fulfil.rate_limit.exceeded?
+=> true
+
+# The maximum number of requests you're permitted to make per second.
+$ Fulfil.rate_limit.limit
+=> 9
+
+# The time at which the current rate limit window resets in UTC epoch seconds.
+$ Fulfil.rate_limit.resets_at
+=> #<DateTime: 2022-01-21T16:36:01-04:00 />
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
