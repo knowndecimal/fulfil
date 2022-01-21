@@ -31,6 +31,17 @@ module Fulfil
     end
 
     def verify!
+      verify_rate_limits!
+      verify_http_status_code!
+    end
+
+    private
+
+    def verify_rate_limits!
+      Fulfil.rate_limit.analyse!(@response.headers)
+    end
+
+    def verify_http_status_code!
       return true unless @status_code >= 400
 
       raise HTTP_ERROR_CODES.fetch(@status_code, Fulfil::HttpError).new(
@@ -42,8 +53,6 @@ module Fulfil
         }
       )
     end
-
-    private
 
     def response_body
       @response_body ||= @response.parse
