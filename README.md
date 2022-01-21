@@ -136,7 +136,7 @@ This gem exposes an API for checking your current rate limits (note: the gem onl
 Whenever you reached the rate limit, the `Fulfil::RateLimitExceeded` exception is being raised. You can use the information on the `Fulfil.rate_limit` to find out what to do next.
 
 ```ruby
-$ Fulfil.rate_limit.requests_left? # or use Fulfil.rate_limit.exceeded?
+$ Fulfil.rate_limit.requests_left?
 => true
 
 # The maximum number of requests you're permitted to make per second.
