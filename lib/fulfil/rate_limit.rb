@@ -27,6 +27,7 @@ module Fulfil
     def requests_left?
       requests_left.positive?
     end
+    alias exceeded? requests_left?
 
     private
 
