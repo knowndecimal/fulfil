@@ -53,9 +53,6 @@ module FulfilHelper
     {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'X-RateLimit-Limit': 10,
-      'X-RateLimit-Remaining': 9,
-      'X-RateLimit-Reset': Time.now.utc.to_i
     }
   end
 

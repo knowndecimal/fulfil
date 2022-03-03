@@ -3,27 +3,6 @@
 require 'minitest/autorun'
 
 class RateLimitTest < Minitest::Test
-  def test_default_values
-    rate_limit = Fulfil::RateLimit.new
-
-    assert_equal 0, rate_limit.limit
-    assert_equal 0, rate_limit.requests_left
-    assert_nil rate_limit.resets_at
-  end
-
-  def test_rate_limit_assignments
-    rate_limit = Fulfil::RateLimit.new
-
-    rate_limit.limit = '10'
-    assert_equal 10, rate_limit.limit
-
-    rate_limit.requests_left = '9'
-    assert_equal 9, rate_limit.requests_left
-
-    rate_limit.resets_at = Time.now.utc.to_i
-    assert_in_delta Time.now.to_datetime, rate_limit.resets_at
-  end
-
   def test_rate_limit_analyse
     rate_limit = Fulfil::RateLimit.new
 

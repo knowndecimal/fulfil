@@ -25,12 +25,7 @@ class ResponseHandlerTest < Minitest::Test
     end
 
     def headers
-      {
-        'Response-Type' => 'application/json',
-        'X-RateLimit-Limit' => 10,
-        'X-RateLimit-Remaining' => 9,
-        'X-RateLimit-Reset' => Time.now.utc.to_i
-      }
+      { 'Response-Type': 'application/json' }
     end
 
     def status
