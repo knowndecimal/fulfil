@@ -9,13 +9,12 @@ module FulfilHelper
 
   def stub_fulfil_get(path, fixture, status_code = 200)
     stub_request(:get, "https://#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io/api/v2/model/#{path}")
-      .with(headers: valid_request_headers)
       .to_return(status: status_code, body: load_fixture(fixture), headers: valid_response_headers)
   end
 
   def stub_fulfil_put(path, fixture, body, status_code = 200)
     stub_request(:put, "https://#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io/api/v2/model/#{path}")
-      .with(headers: valid_request_headers, body: body)
+      .with(body: body)
       .to_return(status: status_code, body: load_fixture(fixture), headers: valid_response_headers)
   end
 
@@ -52,8 +51,8 @@ module FulfilHelper
 
   def valid_response_headers
     {
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
     }
   end
 

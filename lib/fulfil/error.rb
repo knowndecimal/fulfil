@@ -3,6 +3,8 @@
 module Fulfil
   class Error < StandardError; end
 
+  class RateLimitExceeded < Error; end
+
   # The `Fulfil::HttpError` is raised whenever an API request returns a 400+ HTTP status code.
   # See `Fulfil::ResponseHandler` for more information.
   class HttpError < Error
