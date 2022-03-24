@@ -47,7 +47,7 @@ sale_model = Fulfil::Model.new(
 )
 
 sales = sale_model.search(
-  domain: [['id', '=', [10]]],
+  domain: [['id', '=', 10]],
   fields: ['id', 'rec_name', 'lines']
 )
 
