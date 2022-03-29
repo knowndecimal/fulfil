@@ -12,3 +12,4 @@ require 'minitest/ci' if ENV['CI']
 require 'minitest/autorun'
 
 require 'support/fulfil_helper'
+require 'support/configuration_helper'
