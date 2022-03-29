@@ -164,6 +164,13 @@ module Fulfil
     rescue HTTP::ResponseError => e
       raise ResponseError, "Can't process response: #{e}"
       []
+    # If configured, the client will wait whenever the `RateLimitExceeded` exception
+    # is raised. Check `Fulfil::Configuration` for more details.
+    rescue RateLimitExceeded => e
+      raise e unless config.retry_on_rate_limit?
+
+      sleep config.retry_on_rate_limit_wait
+      retry
     end
 
     def client
@@ -171,6 +178,10 @@ module Fulfil
       client = client.auth("Bearer #{@token}") if @token
       client = client.headers(@headers)
       client
+    end
+
+    def config
+      Fulfil.config
     end
   end
 end
