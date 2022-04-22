@@ -9,7 +9,7 @@ A Ruby library for the [Fulfil.io](https://fulfil.io) API.
 Add this line to your application's Gemfile:
 
 ```ruby
-  gem 'fulfil-io', require: 'fulfil'
+  gem 'fulfil-io'
 ```
 
 And then execute:
@@ -37,8 +37,6 @@ if oauth doesn't work, returning an Unauthorized error, to use the
 `FULFIL_API_KEY`, the `FULFIL_OAUTH_TOKEN` shouldn't be specified.
 
 ```ruby
-require 'fulfil' # this is necessary only in case of running without bundler
-
 fulfil = Fulfil::Client.new # or, to enable request debugging, Fulfil::Client.new(debug: true)
 
 sale_model = Fulfil::Model.new(

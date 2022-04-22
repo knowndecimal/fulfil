@@ -14,7 +14,10 @@ Gem::Specification.new do |spec|
 
   # Specify which files should be added to the gem when it is released.
   # To include hidden files from the lib/ folder you need to use the File::FNM_DOTMATCH flag
-  spec.files         = Dir.glob(%w[lib/**/* Rakefile], File::FNM_DOTMATCH)
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
+    Dir['lib/**/*', 'LICENSE', 'Rakefile', 'README.md']
+  end
+
   spec.bindir        = 'bin'
   spec.require_paths = 'lib'
   spec.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
