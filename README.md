@@ -213,7 +213,7 @@ def test_find_one
   stub_fulfil_get('sale.sale/213112', 'sale_sale')
 
   client = Fulfil::Client.new
-  response = client.find_one(model: 'sale.sale', id: 213_112)
+  response = client.find(model: 'sale.sale', id: 213_112)
 
   assert_equal 213_112, response['id']
 end
