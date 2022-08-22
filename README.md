@@ -173,6 +173,18 @@ Fulfil.configure do |config|
 end
 ```
 
+## Retrieve multiple records
+
+To retrieve multiple records at once, one can pass the IDs into the find method directly.
+
+```ruby
+FulfilClient.find(
+  model: 'sale.sale',
+  ids: [1, 2, 3, 4],
+  fields: %w[id status]
+)
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
