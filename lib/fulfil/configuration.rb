@@ -3,16 +3,15 @@
 module Fulfil
   # The `Fulfil::Configuration` contains the available configuration options
   # for the `Fulfil` gem.
-  #
   class Configuration
     # Allow the `Fulfil::Client` to automatically retry when the rate limit is hit.
-    # By default, the `Fulfil::Client` will wait 3 seconds before retrying again.
+    # By default, the `Fulfil::Client` will wait 1 second before retrying again.
     attr_accessor :retry_on_rate_limit
     attr_accessor :retry_on_rate_limit_wait
 
     def initialize
       @retry_on_rate_limit = false
-      @retry_on_rate_limit_wait = 3
+      @retry_on_rate_limit_wait = 1
     end
 
     def retry_on_rate_limit?
