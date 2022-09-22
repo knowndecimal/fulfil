@@ -36,5 +36,37 @@ module Fulfil
 
       assert_equal 362_560, order_count
     end
+
+    def test_retry_on_request_failure_when_configured
+      sale_id = 404
+
+      stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
+        .to_return(
+          { status: 200, body: '', headers: { 'Content-Type': 'application/json', 'X-RateLimit-Remaining': 0 } },
+          { status: 200, body: { id: 100 }.to_json, headers: { 'Content-Type': 'application/json' } }
+        )
+
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit = true
+        config.retry_on_rate_limit_wait = 0.05 # Wait for a very short period to keep the tests fast.
+
+        assert_equal({ 'id' => 100 }, Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id))
+      end
+    end
+
+    def test_do_not_retry_when_retry_is_disabled
+      sale_id = 404
+
+      stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
+        .to_return(status: 200, body: '', headers: { 'Content-Type': 'application/json', 'X-RateLimit-Remaining': 0 })
+
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit = false
+
+        assert_raises Fulfil::RateLimitExceeded do
+          Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id)
+        end
+      end
+    end
   end
 end
