@@ -13,3 +13,7 @@ require 'minitest/autorun'
 
 require 'support/fulfil_helper'
 require 'support/configuration_helper'
+
+class Minitest::Test
+  include FulfilHelper
+end
