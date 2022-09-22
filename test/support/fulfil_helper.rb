@@ -7,13 +7,21 @@ module FulfilHelper
     'Host' => "#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io"
   }.freeze
 
+  # Builds the URL to the Fulfil API endpoints.
+  #
+  # @param path [String] The relative path to the endpoint.
+  # @return [String] The full URI to the API endpoint.
+  def fulfil_url_for(path)
+    "https://#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io/api/v2/model/#{path}"
+  end
+
   def stub_fulfil_get(path, fixture, status_code = 200)
-    stub_request(:get, "https://#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io/api/v2/model/#{path}")
+    stub_request(:get, fulfil_url_for(path))
       .to_return(status: status_code, body: load_fixture(fixture), headers: valid_response_headers)
   end
 
   def stub_fulfil_put(path, fixture, body, status_code = 200)
-    stub_request(:put, "https://#{ENV.fetch('FULFIL_SUBDOMAIN')}.fulfil.io/api/v2/model/#{path}")
+    stub_request(:put, fulfil_url_for(path))
       .with(body: body)
       .to_return(status: status_code, body: load_fixture(fixture), headers: valid_response_headers)
   end

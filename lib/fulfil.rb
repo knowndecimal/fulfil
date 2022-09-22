@@ -2,6 +2,7 @@
 
 require 'fulfil/version'
 require 'fulfil/error'
+require 'fulfil/configuration'
 require 'fulfil/client'
 require 'fulfil/model'
 require 'fulfil/interactive_report'
