@@ -145,6 +145,18 @@ $ Fulfil.rate_limit.limit
 $ Fulfil.rate_limit.resets_at
 => #<DateTime: 2022-01-21T16:36:01-04:00 />
 ```
+
+Automatic retries are supported whenever the rate limit is reached. However, it's not enabled by default. To enable it, set the `retry_on_rate_limit` to `true`. By default, the request will be retried in 1 second.
+
+```ruby
+# config/initializers/fulfil.rb
+
+Fulfil.configure do |config|
+  config.retry_on_rate_limit = true # Defaults to false
+  config.retry_on_rate_limit_wait = 0.25 # Defaults to 1 (second)
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
