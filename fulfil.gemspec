@@ -5,7 +5,7 @@ require_relative 'lib/fulfil/version'
 Gem::Specification.new do |spec|
   spec.name          = 'fulfil-io'
   spec.version       = Fulfil::VERSION
-  spec.authors       = ['Chris Moore', 'Kat Fairbanks']
+  spec.authors       = ['Chris Moore', 'Kat Fairbanks', 'Stefan Vermaas']
   spec.email         = ['chris@knowndecimal.com']
 
   spec.summary       = 'Interact with the Fulfil.io API'

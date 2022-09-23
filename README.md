@@ -146,6 +146,8 @@ $ Fulfil.rate_limit.resets_at
 => #<DateTime: 2022-01-21T16:36:01-04:00 />
 ```
 
+### Automatic retry API call after rate limit hit
+
 Automatic retries are supported whenever the rate limit is reached. However, it's not enabled by default. To enable it, set the `retry_on_rate_limit` to `true`. By default, the request will be retried in 1 second.
 
 ```ruby
@@ -154,6 +156,20 @@ Automatic retries are supported whenever the rate limit is reached. However, it'
 Fulfil.configure do |config|
   config.retry_on_rate_limit = true # Defaults to false
   config.retry_on_rate_limit_wait = 0.25 # Defaults to 1 (second)
+end
+```
+
+### Monitor rate limit hits
+
+Through the configurable `rate_limit_notification_handler` one can monitor the rate limit hits to the APM tool of choice.
+
+```ruby
+# config/initializers/fulfil.rb
+
+Fulfil.configure do |config|
+  config.rate_limit_notification_handler = proc {
+    FakeAPM.increment_counter('fulfil.rate_limit_exceeded')
+  }
 end
 ```
 
