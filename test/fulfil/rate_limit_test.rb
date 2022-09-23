@@ -46,19 +46,21 @@ module Fulfil
       with_fulfil_config do |config|
         config.retry_on_rate_limit_notification_handler = notification_handler_mock
 
-        rate_limit.analyse!(
-          {
-            'X-RateLimit-Limit' => '10',
-            'X-RateLimit-Remaining' => '0',
-            'X-RateLimit-Reset' => Time.now.utc.to_i
-          }
-        )
+        begin
+          rate_limit.analyse!(
+            {
+              'X-RateLimit-Limit' => '10',
+              'X-RateLimit-Remaining' => '0',
+              'X-RateLimit-Reset' => Time.now.utc.to_i
+            }
+          )
+        rescue Fulfil::RateLimitExceeded
+          # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
+          # notification handler in this test case.
+          true
+        end
 
         assert_mock notification_handler_mock
-      rescue Fulfil::RateLimitExceeded
-        # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
-        # notification handler in this test case.
-        true
       end
     end
 
@@ -71,19 +73,21 @@ module Fulfil
       with_fulfil_config do |config|
         config.retry_on_rate_limit_notification_handler = nil
 
-        rate_limit.analyse!(
-          {
-            'X-RateLimit-Limit' => '10',
-            'X-RateLimit-Remaining' => '9',
-            'X-RateLimit-Reset' => Time.now.utc.to_i
-          }
-        )
+        begin
+          rate_limit.analyse!(
+            {
+              'X-RateLimit-Limit' => '10',
+              'X-RateLimit-Remaining' => '9',
+              'X-RateLimit-Reset' => Time.now.utc.to_i
+            }
+          )
+        rescue Fulfil::RateLimitExceeded
+          # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
+          # notification handler in this test case.
+          true
+        end
 
         refute_mock notification_handler_mock
-      rescue Fulfil::RateLimitExceeded
-        # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
-        # notification handler in this test case.
-        true
       end
     end
   end
