@@ -21,3 +21,7 @@ AllCops:
     - vendor/**/*
   NewCops: enable
   SuggestExtensions: false
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - test/test_helper.rb
