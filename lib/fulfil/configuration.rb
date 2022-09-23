@@ -9,6 +9,19 @@ module Fulfil
     attr_accessor :retry_on_rate_limit
     attr_accessor :retry_on_rate_limit_wait
 
+    # Allows the client to configure a notification handler. Can be used by APM
+    # tools to monitor the number of rate limit hits.
+    #
+    # @example Use APM to monitor the API rate limit hits
+    #   Fulfil.configure do |config|
+    #     config.retry_on_rate_limit_notification_handler = proc {
+    #       AppSignal.increment_counter('fulfil.rate_limit_exceeded')
+    #     }
+    #   end
+    #
+    # @return [Proc, nil]
+    attr_accessor :retry_on_rate_limit_notification_handler
+
     def initialize
       @retry_on_rate_limit = false
       @retry_on_rate_limit_wait = 1
