@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fulfil/query'
 
 module Fulfil
@@ -12,32 +14,31 @@ module Fulfil
 
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
-    def find(model: model_name, id:)
-      @client.find(model: model, id: id)
+    def find(id:, model: model_name)
+      @client.find(model:, id:)
     end
 
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
     def search(
-      model: model_name,
-      domain:,
+      domain:, model: model_name,
       fields: %w[id rec_name],
       limit: nil,
       offset: nil,
       sort: nil
     )
       @client.search(
-        model: model,
-        domain: domain,
-        fields: fields,
-        limit: limit,
-        offset: offset,
-        sort: sort
+        model:,
+        domain:,
+        fields:,
+        limit:,
+        offset:,
+        sort:
       )
     end
 
     def count(domain:)
-      @client.count(model: model_name, domain: domain)
+      @client.count(model: model_name, domain:)
     end
 
     def all
@@ -51,7 +52,7 @@ module Fulfil
 
     def attributes
       results = @client.search(model: model_name, domain: [], limit: 1)
-      @client.find(model: model_name, id: results.first.dig('id'))
+      @client.find(model: model_name, id: results.first['id'])
     end
 
     def fetch_associated(models:, association_name:, source_key:, fields:)
@@ -63,10 +64,10 @@ module Fulfil
 
       associated_models =
         @client.find(
-          model: association_name, ids: associated_ids, fields: fields
+          model: association_name, ids: associated_ids, fields:
         )
 
-      associated_models_by_id = associated_models.map { |m| [m['id'], m] }.to_h
+      associated_models_by_id = associated_models.to_h { |m| [m['id'], m] }
 
       models.each do |model|
         filtered_models =

@@ -39,7 +39,7 @@ class ResponseHandlerTest < Minitest::Test
 
   ALL_HTTP_STATUS_CODES.each do |http_status_code|
     status_code = http_status_code.to_i
-    response = ResponseMock.new(status_code: status_code)
+    response = ResponseMock.new(status_code:)
 
     if status_code >= 400
       expected_exception =

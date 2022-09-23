@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fulfil
   module ResponseParser
     class UnhandledTypeError < StandardError
@@ -17,19 +19,19 @@ module Fulfil
     # }
     #
     def self.mapped_value_field(value:)
-      return value unless value.is_a?(Hash) && value.dig('__class__')
+      return value unless value.is_a?(Hash) && value['__class__']
 
-      json_class = value.dig('__class__')
+      json_class = value['__class__']
 
       case json_class
       when 'date'
-        date = value.dig('iso_string')
+        date = value['iso_string']
         Date.parse(date)
       when 'datetime'
-        time = value.dig('iso_string')
+        time = value['iso_string']
         DateTime.parse(time)
       when 'Decimal', 'timedelta'
-        value.dig('decimal').to_f
+        value['decimal'].to_f
       else
         raise UnhandledTypeError.new(
           "received a value that we don't know how to handle: #{json_class}",
@@ -46,7 +48,7 @@ module Fulfil
           [group_key, mapped_value_field(value: kv_tuples[0][1])]
         else
           id = kv_tuples[0]
-          attrs = kv_tuples[1..-1].map { |tuple| [tuple[0][1..-1], tuple[1]] }
+          attrs = kv_tuples[1..].map { |tuple| [tuple[0][1..], tuple[1]] }
           [group_key, [['id', id[1]]].concat(group(attrs)).to_h]
         end
       end

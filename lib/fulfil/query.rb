@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fulfil
   class Query
     def initialize
@@ -9,12 +11,13 @@ module Fulfil
     end
 
     def search(*args)
-      options = args.first { |arg| arg.is_a?(Hash) && arg.keys.include?(:options) }.fetch(:options, {})
+      options = args.first { |arg| arg.is_a?(Hash) && arg.key?(:options) }.fetch(:options, {})
 
       args.each do |arg|
         arg.each do |field, value|
           next if value == options
-          @matchers.concat(build_search_term(field: field, value: value, options: options))
+
+          @matchers.concat(build_search_term(field:, value:, options:))
         end
       end
 
@@ -22,17 +25,18 @@ module Fulfil
     end
 
     def exclude(*args)
-      options = args.first { |arg| arg.is_a?(Hash) && arg.keys.include?(:options) }.fetch(:options, {})
+      options = args.first { |arg| arg.is_a?(Hash) && arg.key?(:options) }.fetch(:options, {})
 
       terms = args.flat_map do |arg|
-                arg.map do |field, value|
-                  next if value == options
-                  build_exclude_term(field: field, value: value, options: options)
-                end
-              end
+        arg.map do |field, value|
+          next if value == options
+
+          build_exclude_term(field:, value:, options:)
+        end
+      end
 
       if terms.length > 1
-        @matchers.push(["OR"].concat(terms))
+        @matchers.push(['OR'].concat(terms))
       else
         @matchers.concat(terms.first)
       end
@@ -62,7 +66,7 @@ module Fulfil
     #
     # IN, NOT IN: (Array)
     #
-    def build_search_term(prefix: nil, field:, value:, options:)
+    def build_search_term(field:, value:, options:, prefix: nil)
       key = [prefix, field.to_s].compact.join('.')
 
       case value.class.name
@@ -73,7 +77,7 @@ module Fulfil
       when 'Range'
         [
           [key, '>=', value.first],
-          [key, '<=', value.last],
+          [key, '<=', value.last]
         ]
       when 'String'
         if options[:case_sensitive]
@@ -82,15 +86,15 @@ module Fulfil
           [[key, 'ilike', value]]
         end
       when 'Hash'
-        value.flat_map { |nested_field, nested_value|
-          build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
-        }
+        value.flat_map do |nested_field, nested_value|
+          build_search_term(prefix: field, field: nested_field, value: nested_value, options:)
+        end
       else
         raise "Unhandled value type: #{value} (#{value.class.name})"
       end
     end
 
-    def build_exclude_term(prefix: nil, field:, value:, options:)
+    def build_exclude_term(field:, value:, options:, prefix: nil)
       key = [prefix, field.to_s].compact.join('.')
 
       case value.class.name
@@ -101,12 +105,12 @@ module Fulfil
       when 'Range'
         [
           [key, '<', value.first],
-          [key, '>', value.last],
+          [key, '>', value.last]
         ]
       when 'Hash'
-        value.flat_map { |nested_field, nested_value|
-          build_exclude_term(prefix: field, field: nested_field, value: nested_value, options: options)
-        }
+        value.flat_map do |nested_field, nested_value|
+          build_exclude_term(prefix: field, field: nested_field, value: nested_value, options:)
+        end
       else
         raise "Unhandled value type: #{value} (#{value.class.name})"
       end

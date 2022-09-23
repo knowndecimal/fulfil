@@ -5,8 +5,8 @@ require 'logger'
 require 'fulfil/response_parser'
 
 module Fulfil
-  SUBDOMAIN = ENV['FULFIL_SUBDOMAIN']
-  API_KEY = ENV['FULFIL_API_KEY']
+  SUBDOMAIN = ENV.fetch('FULFIL_SUBDOMAIN', nil)
+  API_KEY = ENV.fetch('FULFIL_API_KEY', nil)
 
   class Client
     class InvalidClientError < StandardError
@@ -43,9 +43,9 @@ module Fulfil
 
     def find(model:, ids: [], id: nil, fields: %w[id rec_name])
       if ids.any?
-        find_many(model: model, ids: ids, fields: fields)
+        find_many(model:, ids:, fields:)
       elsif !id.nil?
-        find_one(model: model, id: id)
+        find_one(model:, id:)
       else
         raise
       end
@@ -54,59 +54,59 @@ module Fulfil
     def find_one(model:, id:)
       raise 'missing id' if id.nil?
 
-      uri = URI("#{model_url(model: model)}/#{id}")
+      uri = URI("#{model_url(model:)}/#{id}")
       result = request(endpoint: uri)
-      parse(result: result)
+      parse(result:)
     end
 
     def find_many(model:, ids:, fields: nil)
       raise 'missing ids' if ids.empty?
 
-      uri = URI("#{model_url(model: model)}/read")
+      uri = URI("#{model_url(model:)}/read")
       results = request(verb: :put, endpoint: uri, json: [ids, fields])
-      parse(results: results)
+      parse(results:)
     end
 
     def search(model:, domain:, offset: nil, limit: 100, sort: nil, fields: %w[id])
-      uri = URI("#{model_url(model: model)}/search_read")
+      uri = URI("#{model_url(model:)}/search_read")
       body = [domain, offset, limit, sort, fields]
 
       results = request(verb: :put, endpoint: uri, json: body)
-      parse(results: results)
+      parse(results:)
     end
 
     def count(model:, domain:)
-      uri = URI("#{model_url(model: model)}/search_count")
+      uri = URI("#{model_url(model:)}/search_count")
       body = [domain]
 
       request(verb: :put, endpoint: uri, json: body)
     end
 
     def post(model:, body: {})
-      uri = URI(model_url(model: model))
+      uri = URI(model_url(model:))
 
       results = request(verb: :post, endpoint: uri, json: body)
-      parse(results: results)
+      parse(results:)
     end
 
     def put(model: nil, id: nil, endpoint: nil, body: {})
-      uri = URI(model_url(model: model, id: id, endpoint: endpoint))
+      uri = URI(model_url(model:, id:, endpoint:))
 
       result = request(verb: :put, endpoint: uri, json: body)
-      parse(result: result)
+      parse(result:)
     end
 
     def delete(model:, id:)
-      uri = URI(model_url(model: model, id: id))
+      uri = URI(model_url(model:, id:))
 
       result = request(verb: :delete, endpoint: uri)
-      parse(result: result)
+      parse(result:)
     end
 
     def interactive_report(endpoint:, body: nil)
       uri = URI("#{base_url}/model/#{endpoint}")
       result = request(verb: :put, endpoint: uri, json: body)
-      parse(result: result)
+      parse(result:)
     end
 
     private
@@ -114,17 +114,17 @@ module Fulfil
     def oauth_token
       if ENV['FULFIL_TOKEN']
         puts "You're using an deprecated environment variable. Please update your " \
-              'FULFIL_TOKEN to FULFIL_OAUTH_TOKEN.'
+             'FULFIL_TOKEN to FULFIL_OAUTH_TOKEN.'
       end
 
-      ENV['FULFIL_OAUTH_TOKEN'] || ENV['FULFIL_TOKEN']
+      ENV['FULFIL_OAUTH_TOKEN'] || ENV.fetch('FULFIL_TOKEN', nil)
     end
 
     def parse(result: nil, results: [])
       if result
-        parse_single(result: result)
+        parse_single(result:)
       else
-        parse_multiple(results: results)
+        parse_multiple(results:)
       end
     end
 
@@ -174,10 +174,9 @@ module Fulfil
     end
 
     def client
-      client = HTTP.use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
+      client = HTTP.use(logging: @debug ? { logger: Logger.new($stdout) } : {})
       client = client.auth("Bearer #{@token}") if @token
-      client = client.headers(@headers)
-      client
+      client.headers(@headers)
     end
 
     def config
