@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = 'lib'
   spec.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
 
-  spec.required_ruby_version = '>= 2.4'
+  spec.required_ruby_version = '>= 2.6'
 
   spec.add_dependency 'http', '>= 4.4.1', '< 5.2.0'
 
