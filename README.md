@@ -161,13 +161,13 @@ end
 
 ### Monitor rate limit hits
 
-Through the configurable `retry_on_rate_limit_notification_handler` one can monitor the rate limit hits to the APM tool of choice.
+Through the configurable `rate_limit_notification_handler` one can monitor the rate limit hits to the APM tool of choice.
 
 ```ruby
 # config/initializers/fulfil.rb
 
 Fulfil.configure do |config|
-  config.retry_on_rate_limit_notification_handler = proc {
+  config.rate_limit_notification_handler = proc {
     FakeAPM.increment_counter('fulfil.rate_limit_exceeded')
   }
 end

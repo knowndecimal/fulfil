@@ -37,14 +37,14 @@ module Fulfil
       refute rate_limit.requests_left?
     end
 
-    def test_retry_on_rate_limit_notification_handler
+    def test_rate_limit_notification_handler
       rate_limit = Fulfil::RateLimit.new
 
       notification_handler_mock = MiniTest::Mock.new
       notification_handler_mock.expect(:call, 'to be called')
 
       with_fulfil_config do |config|
-        config.retry_on_rate_limit_notification_handler = notification_handler_mock
+        config.rate_limit_notification_handler = notification_handler_mock
 
         begin
           rate_limit.analyse!(
@@ -64,14 +64,14 @@ module Fulfil
       end
     end
 
-    def test_missing_retry_on_rate_limit_notification_handler
+    def test_missing_rate_limit_notification_handler
       rate_limit = Fulfil::RateLimit.new
 
       notification_handler_mock = MiniTest::Mock.new
       notification_handler_mock.expect(:call, 'to be called')
 
       with_fulfil_config do |config|
-        config.retry_on_rate_limit_notification_handler = nil
+        config.rate_limit_notification_handler = nil
 
         begin
           rate_limit.analyse!(

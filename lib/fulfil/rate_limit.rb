@@ -32,7 +32,7 @@ module Fulfil
 
     # @raise [Fulfil::RateLimitExceeded]
     def report_rate_limit_hit_and_raise
-      Fulfil.config.retry_on_rate_limit_notification_handler&.call
+      Fulfil.config.rate_limit_notification_handler&.call
       raise Fulfil::RateLimitExceeded
     end
   end
