@@ -66,5 +66,49 @@ module Fulfil
         end
       end
     end
+
+    def test_retry_on_rate_limit_notification_handler
+      sale_id = 404
+
+      notification_handler_mock = MiniTest::Mock.new
+      notification_handler_mock.expect(:call, 'to be called')
+
+      stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
+        .to_return(status: 200, body: '', headers: { 'Content-Type': 'application/json', 'X-RateLimit-Remaining': 0 })
+
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit_notification_handler = notification_handler_mock
+
+        Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id)
+
+        assert_mock notification_handler_mock
+      rescue Fulfil::RateLimitExceeded
+        # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
+        # notification handler in this test case.
+        true
+      end
+    end
+
+    def test_missing_retry_on_rate_limit_notification_handler
+      sale_id = 404
+
+      notification_handler_mock = MiniTest::Mock.new
+      notification_handler_mock.expect(:call, 'to be called')
+
+      stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
+        .to_return(status: 200, body: '', headers: { 'Content-Type': 'application/json', 'X-RateLimit-Remaining': 0 })
+
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit_notification_handler = nil
+
+        Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id)
+
+        refute_mock notification_handler_mock
+      rescue Fulfil::RateLimitExceeded
+        # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
+        # notification handler in this test case.
+        true
+      end
+    end
   end
 end
