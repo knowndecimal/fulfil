@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'minitest/autorun'
+require 'test_helper'
 
 class RateLimitTest < Minitest::Test
   def test_rate_limit_analyse
@@ -34,5 +34,55 @@ class RateLimitTest < Minitest::Test
 
     rate_limit.requests_left = 0
     refute rate_limit.requests_left?
+  end
+
+  def test_retry_on_rate_limit_notification_handler
+    rate_limit = Fulfil::RateLimit.new
+
+    notification_handler_mock = MiniTest::Mock.new
+    notification_handler_mock.expect(:call, 'to be called')
+
+    with_fulfil_config do |config|
+      config.retry_on_rate_limit_notification_handler = notification_handler_mock
+
+      rate_limit.analyse!(
+        {
+          'X-RateLimit-Limit' => '10',
+          'X-RateLimit-Remaining' => '0',
+          'X-RateLimit-Reset' => Time.now.utc.to_i
+        }
+      )
+
+      assert_mock notification_handler_mock
+    rescue Fulfil::RateLimitExceeded
+      # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
+      # notification handler in this test case.
+      true
+    end
+  end
+
+  def test_missing_retry_on_rate_limit_notification_handler
+    rate_limit = Fulfil::RateLimit.new
+
+    notification_handler_mock = MiniTest::Mock.new
+    notification_handler_mock.expect(:call, 'to be called')
+
+    with_fulfil_config do |config|
+      config.retry_on_rate_limit_notification_handler = nil
+
+      rate_limit.analyse!(
+        {
+          'X-RateLimit-Limit' => '10',
+          'X-RateLimit-Remaining' => '9',
+          'X-RateLimit-Reset' => Time.now.utc.to_i
+        }
+      )
+
+      refute_mock notification_handler_mock
+    rescue Fulfil::RateLimitExceeded
+      # We want to ignore the `Fulfil::RateLimitExceeded` as we're testing the
+      # notification handler in this test case.
+      true
+    end
   end
 end

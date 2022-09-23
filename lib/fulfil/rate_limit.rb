@@ -8,7 +8,7 @@ module Fulfil
 
     # Analyses the rate limit based on the response headers from Fulfil.
     # @param headers [HTTP::Headers] The HTTP response headers from Fulfil.
-    # @return [Fulfil::RateLimit]
+    # @raise [Fulfil::RateLimitExceeded] When the rate limit is hit.
     def analyse!(headers)
       rate_limit_headers = RateLimitHeaders.new(headers)
 
@@ -16,13 +16,21 @@ module Fulfil
       self.requests_left = rate_limit_headers.requests_left
       self.resets_at = rate_limit_headers.resets_at
 
-      raise Fulfil::RateLimitExceeded unless requests_left?
+      report_rate_limit_hit_and_raise unless requests_left?
     end
 
     # Returns whether there are any requests left in the current rate limit window.
     # @return [Boolean]
     def requests_left?
       requests_left&.positive?
+    end
+
+    private
+
+    # @raise [Fulfil::RateLimitExceeded]
+    def report_rate_limit_hit_and_raise
+      Fulfil.config.retry_on_rate_limit_notification_handler&.call
+      raise Fulfil::RateLimitExceeded
     end
   end
 end

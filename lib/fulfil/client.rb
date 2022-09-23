@@ -167,7 +167,6 @@ module Fulfil
     # If configured, the client will wait whenever the `RateLimitExceeded` exception
     # is raised. Check `Fulfil::Configuration` for more details.
     rescue RateLimitExceeded => e
-      config.retry_on_rate_limit_notification_handler&.call
       raise e unless config.retry_on_rate_limit?
 
       sleep config.retry_on_rate_limit_wait
