@@ -15,7 +15,7 @@ module Fulfil
     # @example Use APM to monitor the API rate limit hits
     #   Fulfil.configure do |config|
     #     config.retry_on_rate_limit_notification_handler = proc {
-    #       AppSignal.increment_counter('fulfil.rate_limit_exceeded')
+    #       FakeAPM.increment_counter('fulfil.rate_limit_exceeded')
     #     }
     #   end
     #
