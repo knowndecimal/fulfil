@@ -21,7 +21,8 @@ module Fulfil
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
     def search(
-      domain:, model: model_name,
+      domain:,
+      model: model_name,
       fields: %w[id rec_name],
       limit: nil,
       offset: nil,

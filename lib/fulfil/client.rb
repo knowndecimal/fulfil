@@ -45,7 +45,7 @@ module Fulfil
       if ids.any?
         find_many(model: model, ids: ids, fields: fields)
       elsif !id.nil?
-        find_one(model: model, id: ids)
+        find_one(model: model, id: id)
       else
         raise
       end
