@@ -6,7 +6,7 @@ class RateLimitTest < Minitest::Test
   def test_rate_limit_analyse
     rate_limit = Fulfil::RateLimit.new
 
-    rate_limit.analyse!(
+    assert rate_limit.analyse!(
       {
         'X-RateLimit-Limit' => '10',
         'X-RateLimit-Remaining' => '9',
