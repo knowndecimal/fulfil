@@ -13,7 +13,9 @@ require 'minitest/autorun'
 
 require 'support/fulfil_helper'
 require 'support/configuration_helper'
+require 'support/custom_assertions'
 
 class Minitest::Test
+  include CustomAssertions
   include FulfilHelper
 end
