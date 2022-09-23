@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'http', '>= 4.4.1', '< 5.2.0'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'dotenv', '~> 2.7', '>= 2.7.6'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'minitest-ci', '~> 3.4' if ENV['CI']
   spec.add_development_dependency 'minitest-reporters', '~> 1.3'
@@ -35,5 +36,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 1.36'
   spec.add_development_dependency 'rubocop-minitest', '~> 0.22.1'
   spec.add_development_dependency 'webmock'
-  spec.add_development_dependency 'dotenv', '~> 2.7', '>= 2.7.6'
 end
