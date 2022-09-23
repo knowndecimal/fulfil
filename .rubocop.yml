@@ -16,3 +16,4 @@ AllCops:
   Exclude:
     - bin/*
   NewCops: enable
+  SuggestExtensions: false
