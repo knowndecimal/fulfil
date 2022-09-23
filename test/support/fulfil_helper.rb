@@ -22,7 +22,7 @@ module FulfilHelper
 
   def stub_fulfil_put(path, fixture, body, status_code = 200)
     stub_request(:put, fulfil_url_for(path))
-      .with(body:)
+      .with(body: body)
       .to_return(status: status_code, body: load_fixture(fixture), headers: valid_response_headers)
   end
 

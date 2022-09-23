@@ -17,7 +17,7 @@ module Fulfil
         arg.each do |field, value|
           next if value == options
 
-          @matchers.concat(build_search_term(field:, value:, options:))
+          @matchers.concat(build_search_term(field: field, value: value, options: options))
         end
       end
 
@@ -31,7 +31,7 @@ module Fulfil
         arg.map do |field, value|
           next if value == options
 
-          build_exclude_term(field:, value:, options:)
+          build_exclude_term(field: field, value: value, options: options)
         end
       end
 
@@ -87,7 +87,7 @@ module Fulfil
         end
       when 'Hash'
         value.flat_map do |nested_field, nested_value|
-          build_search_term(prefix: field, field: nested_field, value: nested_value, options:)
+          build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
         end
       else
         raise "Unhandled value type: #{value} (#{value.class.name})"
@@ -109,7 +109,7 @@ module Fulfil
         ]
       when 'Hash'
         value.flat_map do |nested_field, nested_value|
-          build_exclude_term(prefix: field, field: nested_field, value: nested_value, options:)
+          build_exclude_term(prefix: field, field: nested_field, value: nested_value, options: options)
         end
       else
         raise "Unhandled value type: #{value} (#{value.class.name})"

@@ -15,7 +15,7 @@ module Fulfil
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
     def find(id:, model: model_name)
-      @client.find(model:, id:)
+      @client.find(model: model, id: id)
     end
 
     # Delegate this to the client, including the model_name so we don't have to
@@ -28,17 +28,17 @@ module Fulfil
       sort: nil
     )
       @client.search(
-        model:,
-        domain:,
-        fields:,
-        limit:,
-        offset:,
-        sort:
+        model: model,
+        domain: domain,
+        fields: fields,
+        limit: limit,
+        offset: offset,
+        sort: sort
       )
     end
 
     def count(domain:)
-      @client.count(model: model_name, domain:)
+      @client.count(model: model_name, domain: domain)
     end
 
     def all
@@ -64,7 +64,7 @@ module Fulfil
 
       associated_models =
         @client.find(
-          model: association_name, ids: associated_ids, fields:
+          model: association_name, ids: associated_ids, fields: fields
         )
 
       associated_models_by_id = associated_models.to_h { |m| [m['id'], m] }

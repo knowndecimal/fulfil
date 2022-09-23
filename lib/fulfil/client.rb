@@ -43,9 +43,9 @@ module Fulfil
 
     def find(model:, ids: [], id: nil, fields: %w[id rec_name])
       if ids.any?
-        find_many(model:, ids:, fields:)
+        find_many(model: model, ids: ids, fields: fields)
       elsif !id.nil?
-        find_one(model:, id:)
+        find_one(model: model, id: ids)
       else
         raise
       end
@@ -54,59 +54,59 @@ module Fulfil
     def find_one(model:, id:)
       raise 'missing id' if id.nil?
 
-      uri = URI("#{model_url(model:)}/#{id}")
+      uri = URI("#{model_url(model: model)}/#{id}")
       result = request(endpoint: uri)
-      parse(result:)
+      parse(result: result)
     end
 
     def find_many(model:, ids:, fields: nil)
       raise 'missing ids' if ids.empty?
 
-      uri = URI("#{model_url(model:)}/read")
+      uri = URI("#{model_url(model: model)}/read")
       results = request(verb: :put, endpoint: uri, json: [ids, fields])
-      parse(results:)
+      parse(results: results)
     end
 
     def search(model:, domain:, offset: nil, limit: 100, sort: nil, fields: %w[id])
-      uri = URI("#{model_url(model:)}/search_read")
+      uri = URI("#{model_url(model: model)}/search_read")
       body = [domain, offset, limit, sort, fields]
 
       results = request(verb: :put, endpoint: uri, json: body)
-      parse(results:)
+      parse(results: results)
     end
 
     def count(model:, domain:)
-      uri = URI("#{model_url(model:)}/search_count")
+      uri = URI("#{model_url(model: model)}/search_count")
       body = [domain]
 
       request(verb: :put, endpoint: uri, json: body)
     end
 
     def post(model:, body: {})
-      uri = URI(model_url(model:))
+      uri = URI(model_url(model: model))
 
       results = request(verb: :post, endpoint: uri, json: body)
-      parse(results:)
+      parse(results: results)
     end
 
     def put(model: nil, id: nil, endpoint: nil, body: {})
-      uri = URI(model_url(model:, id:, endpoint:))
+      uri = URI(model_url(model: model, id: id, endpoint: endpoint))
 
       result = request(verb: :put, endpoint: uri, json: body)
-      parse(result:)
+      parse(result: result)
     end
 
     def delete(model:, id:)
-      uri = URI(model_url(model:, id:))
+      uri = URI(model_url(model: model, id: id))
 
       result = request(verb: :delete, endpoint: uri)
-      parse(result:)
+      parse(result: result)
     end
 
     def interactive_report(endpoint:, body: nil)
       uri = URI("#{base_url}/model/#{endpoint}")
       result = request(verb: :put, endpoint: uri, json: body)
-      parse(result:)
+      parse(result: result)
     end
 
     private
@@ -122,9 +122,9 @@ module Fulfil
 
     def parse(result: nil, results: [])
       if result
-        parse_single(result:)
+        parse_single(result: result)
       else
-        parse_multiple(results:)
+        parse_multiple(results: results)
       end
     end
 
