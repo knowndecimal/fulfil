@@ -28,13 +28,13 @@ module Fulfil
 
     def test_rate_limit_requests_left
       rate_limit = Fulfil::RateLimit.new
-      refute rate_limit.requests_left?
+      refute_predicate rate_limit, :requests_left?
 
       rate_limit.requests_left = 10
-      assert rate_limit.requests_left?
+      assert_predicate rate_limit, :requests_left?
 
       rate_limit.requests_left = 0
-      refute rate_limit.requests_left?
+      refute_predicate rate_limit, :requests_left?
     end
 
     def test_rate_limit_notification_handler
