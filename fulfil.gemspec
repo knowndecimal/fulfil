@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'oauth2', '~> 1.4'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop', '~> 1.36'
+  spec.add_development_dependency 'rubocop-minitest', '~> 0.22.1'
   spec.add_development_dependency 'webmock'
   spec.add_development_dependency 'dotenv', '~> 2.7', '>= 2.7.6'
 end
