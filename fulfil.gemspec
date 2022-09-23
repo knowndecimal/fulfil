@@ -12,6 +12,9 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/knowndecimal/fulfil'
   spec.license       = 'MIT'
 
+  spec.required_ruby_version = '>= 2.6'
+  spec.metadata['rubygems_mfa_required'] = 'true'
+
   # Specify which files should be added to the gem when it is released.
   # To include hidden files from the lib/ folder you need to use the File::FNM_DOTMATCH flag
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
@@ -21,8 +24,6 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'bin'
   spec.require_paths = 'lib'
   spec.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
-
-  spec.required_ruby_version = '>= 2.6'
 
   spec.add_dependency 'http', '>= 4.4.1', '< 5.2.0'
 
@@ -37,5 +38,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-minitest', '~> 0.22.1'
   spec.add_development_dependency 'rubocop-performance', '~> 1.15'
   spec.add_development_dependency 'webmock'
-  spec.metadata['rubygems_mfa_required'] = 'true'
 end
