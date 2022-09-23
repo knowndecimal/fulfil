@@ -11,6 +11,7 @@
 
 require:
   - rubocop-minitest
+  - rubocop-performance
 
 AllCops:
   Exclude:
