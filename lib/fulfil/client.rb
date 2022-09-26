@@ -5,8 +5,8 @@ require 'logger'
 require 'fulfil/response_parser'
 
 module Fulfil
-  SUBDOMAIN = ENV['FULFIL_SUBDOMAIN']
-  API_KEY = ENV['FULFIL_API_KEY']
+  SUBDOMAIN = ENV.fetch('FULFIL_SUBDOMAIN', nil)
+  API_KEY = ENV.fetch('FULFIL_API_KEY', nil)
 
   class Client
     class InvalidClientError < StandardError
@@ -114,10 +114,10 @@ module Fulfil
     def oauth_token
       if ENV['FULFIL_TOKEN']
         puts "You're using an deprecated environment variable. Please update your " \
-              'FULFIL_TOKEN to FULFIL_OAUTH_TOKEN.'
+             'FULFIL_TOKEN to FULFIL_OAUTH_TOKEN.'
       end
 
-      ENV['FULFIL_OAUTH_TOKEN'] || ENV['FULFIL_TOKEN']
+      ENV['FULFIL_OAUTH_TOKEN'] || ENV.fetch('FULFIL_TOKEN', nil)
     end
 
     def parse(result: nil, results: [])
@@ -174,10 +174,9 @@ module Fulfil
     end
 
     def client
-      client = HTTP.use(logging: @debug ? { logger: Logger.new(STDOUT) } : {})
+      client = HTTP.use(logging: @debug ? { logger: Logger.new($stdout) } : {})
       client = client.auth("Bearer #{@token}") if @token
-      client = client.headers(@headers)
-      client
+      client.headers(@headers)
     end
 
     def config

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fulfil
   class InteractiveReport
     def initialize(client:, report:)

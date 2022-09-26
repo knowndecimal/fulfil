@@ -6,7 +6,7 @@ VERSION=$1
 bundle
 
 # Update the gem version.
-printf "# frozen_string_literal: true\n\nmodule Fulfil\n  VERSION = \"$VERSION\"\nend\n" > ./lib/fulfil/version.rb
+printf "# frozen_string_literal: true\n\nmodule Fulfil\n  VERSION = '$VERSION'\nend\n" > ./lib/fulfil/version.rb
 git add lib/fulfil/version.rb
 git commit -m "Bump version for v$VERSION"
 git push origin main
