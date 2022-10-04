@@ -1,4 +1,6 @@
 [![Tests](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml/badge.svg)](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c6100940d3debd3a3a7c/maintainability)](https://codeclimate.com/github/knowndecimal/fulfil/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/c6100940d3debd3a3a7c/test_coverage)](https://codeclimate.com/github/knowndecimal/fulfil/test_coverage)
 
 # Fulfil.io Rubygem
 
