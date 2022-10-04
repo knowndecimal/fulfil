@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'support/simplecov' if ENV['CI']
+
 require 'dotenv/load'
 
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
