@@ -9,6 +9,7 @@ module Fulfil
 
       with_fulfil_config do |config|
         config.retry_on_rate_limit = true
+
         assert_predicate Fulfil.config, :retry_on_rate_limit?
       end
     end

@@ -16,12 +16,15 @@ module Fulfil
       headers = Fulfil::RateLimitHeaders.new
 
       headers.limit = '10'
+
       assert_equal 10, headers.limit
 
       headers.requests_left = '9'
+
       assert_equal 9, headers.requests_left
 
       headers.resets_at = Time.now.utc.to_i
+
       assert_in_delta Time.now.to_datetime, headers.resets_at
     end
   end
