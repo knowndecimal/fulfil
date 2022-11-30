@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'minitest-ci', '~> 3.4' if ENV['CI']
   spec.add_development_dependency 'minitest-reporters', '~> 1.3'
-  spec.add_development_dependency 'oauth2', '~> 1.4'
+  spec.add_development_dependency 'oauth2', '~> 2.0'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rubocop', '~> 1.36'
   spec.add_development_dependency 'rubocop-minitest', '~> 0.24.0'
