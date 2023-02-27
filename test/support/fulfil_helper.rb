@@ -41,7 +41,7 @@ module FulfilHelper
       puts
       puts 'parsed body:'
       puts
-      pp parsed_body
+      pp parsed_body # rubocop:disable Lint/Debugger, Lint/RedundantCopDisableDirective
       puts '=============================================='
       puts
     end
