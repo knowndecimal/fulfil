@@ -13,7 +13,7 @@ group :development do
   gem 'oauth2', '~> 2.0'
   gem 'rake'
   gem 'rubocop', '~> 1.36'
-  gem 'rubocop-minitest', '~> 0.28.0'
+  gem 'rubocop-minitest', '~> 0.29.0'
   gem 'rubocop-performance', '~> 1.15'
   gem 'simplecov', '~> 0.22.0'
   gem 'webmock'
