@@ -68,5 +68,14 @@ module Fulfil
         end
       end
     end
+
+    def test_put_that_returns_array_wrapped_integer
+      stub_fulfil_put('sale.sale/1/copy', 'sale_sale_copy', '[]')
+
+      client = Fulfil::Client.new
+      order_count = client.put(model: 'sale.sale', id: 1, endpoint: 'copy', body: [])
+
+      assert_equal [123], order_count
+    end
   end
 end
