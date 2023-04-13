@@ -56,7 +56,7 @@ module Fulfil
 
     def self.parse(item:)
       # If the item is not a hash, then it's a value and we can return it.
-      return item unless item[0].is_a?(Hash)
+      return item unless item.is_a?(Hash)
 
       key_value_tuples = item.to_a.map { |item_tuple| [item_tuple[0].split('.'), item_tuple[1]] }
       group(key_value_tuples).to_h
