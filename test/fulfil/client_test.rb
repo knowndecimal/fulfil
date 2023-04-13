@@ -73,9 +73,9 @@ module Fulfil
       stub_fulfil_put('sale.sale/1/copy', 'sale_sale_copy', '[]')
 
       client = Fulfil::Client.new
-      order_count = client.put(model: 'sale.sale', id: 1, endpoint: 'copy', body: [])
+      order_copy = client.put(model: 'sale.sale', id: 1, endpoint: 'copy', body: [])
 
-      assert_equal [123], order_count
+      assert_equal [123], order_copy
     end
   end
 end
