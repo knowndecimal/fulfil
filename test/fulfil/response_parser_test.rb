@@ -46,7 +46,7 @@ class ResponseParserTest < Minitest::Test
 
     assert_equal @expected, result
   end
-  
+
   def test_parser_with_array_wrapped_integer
     expected_result = [123]
 
