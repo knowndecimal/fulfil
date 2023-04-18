@@ -46,6 +46,14 @@ class ResponseParserTest < Minitest::Test
 
     assert_equal @expected, result
   end
+  
+  def test_parser_with_array_wrapped_integer
+    expected_result = [123]
+
+    result = Fulfil::ResponseParser.parse(item: expected_result)
+
+    assert_equal expected_result, result
+  end
 
   def test_unhandled_type
     bad_value = {
