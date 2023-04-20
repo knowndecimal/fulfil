@@ -93,6 +93,7 @@ module Fulfil
       uri = URI(model_url(model: model, id: id, endpoint: endpoint))
 
       result = request(verb: :put, endpoint: uri, json: body)
+
       parse(result: result)
     end
 

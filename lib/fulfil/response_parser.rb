@@ -55,8 +55,12 @@ module Fulfil
     end
 
     def self.parse(item:)
-      key_value_tuples = item.to_a.map { |item_tuple| [item_tuple[0].split('.'), item_tuple[1]] }
-      group(key_value_tuples).to_h
+      case item
+      when Hash
+        group(item.map { |(key, value)| [key.split('.'), value] }).to_h
+      else
+        item
+      end
     end
   end
 end
