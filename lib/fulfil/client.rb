@@ -175,7 +175,7 @@ module Fulfil
     end
 
     def client
-      client = HTTP.use(logging: @debug ? { logger: Logger.new($stdout) } : {})
+      client = HTTP.use(logging: @debug ? { logger: config.logger } : {})
       client = client.auth("Bearer #{@token}") if @token
       client.headers(@headers)
     end

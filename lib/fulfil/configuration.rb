@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'logger'
+
 module Fulfil
   # The `Fulfil::Configuration` contains the available configuration options
   # for the `Fulfil` gem.
@@ -22,9 +24,21 @@ module Fulfil
     # @return [Proc, nil]
     attr_accessor :rate_limit_notification_handler
 
+    # Allows the client to configure a logger. Logs output to STDOUT by default.
+    #
+    # @return [Logger, nil]
+    #
+    # @example Use a logger to log the API rate limit hits
+    #  Fulfil.configure do |config|
+    #    config.logger = Logger.new(STDOUT)
+    #  end
+    #
+    attr_accessor :logger
+
     def initialize
       @retry_on_rate_limit = false
       @retry_on_rate_limit_wait = 1
+      @logger = Logger.new($stdout)
     end
 
     def retry_on_rate_limit?
