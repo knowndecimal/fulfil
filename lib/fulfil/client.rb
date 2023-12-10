@@ -155,8 +155,6 @@ module Fulfil
     end
 
     def request(endpoint:, verb: :get, **args)
-      raise InvalidClientError if invalid?
-
       response = client.request(verb, endpoint, args)
       Fulfil::ResponseHandler.new(response).verify!
 
