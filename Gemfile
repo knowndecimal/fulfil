@@ -12,9 +12,9 @@ group :development do
   gem 'minitest-reporters', '~> 1.3'
   gem 'oauth2', '~> 2.0'
   gem 'rake'
-  gem 'rubocop', '~> 1.36'
-  gem 'rubocop-minitest', '~> 0.30.0'
-  gem 'rubocop-performance', '~> 1.15'
+  gem 'rubocop', '~> 1.58'
+  gem 'rubocop-minitest', '~> 0.33.0'
+  gem 'rubocop-performance', '~> 1.19'
   gem 'simplecov', '~> 0.22.0'
   gem 'webmock'
 end
