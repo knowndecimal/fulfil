@@ -1,3 +1,7 @@
+## 0.8.1
+
+* Add logger to configuration by @cdmwebs in https://github.com/knowndecimal/fulfil/pull/49
+
 ## 0.8.0
 
 * Add rubocop by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/35
