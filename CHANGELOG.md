@@ -1,3 +1,7 @@
+## main
+
+* BREAKING: removes the `headers` param and replaces with `api_key`.
+
 ## 0.8.1
 
 * Add logger to configuration by @cdmwebs in https://github.com/knowndecimal/fulfil/pull/49
