@@ -43,7 +43,7 @@ module Fulfil
     def test_rate_limit_notification_handler
       rate_limit = Fulfil::RateLimit.new
 
-      notification_handler_mock = MiniTest::Mock.new
+      notification_handler_mock = Minitest::Mock.new
       notification_handler_mock.expect(:call, 'to be called')
 
       with_fulfil_config do |config|
@@ -70,7 +70,7 @@ module Fulfil
     def test_missing_rate_limit_notification_handler
       rate_limit = Fulfil::RateLimit.new
 
-      notification_handler_mock = MiniTest::Mock.new
+      notification_handler_mock = Minitest::Mock.new
       notification_handler_mock.expect(:call, 'to be called')
 
       with_fulfil_config do |config|

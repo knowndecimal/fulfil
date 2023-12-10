@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Fulfil
-  class ClientTest < MiniTest::Test
+  class ClientTest < Minitest::Test
     def test_invalid_client
       assert_raises('InvalidClientError') { Fulfil::Client.new(subdomain: nil, token: nil) }
     end
