@@ -8,6 +8,18 @@ module Fulfil
       assert_raises('InvalidClientError') { Fulfil::Client.new(subdomain: nil, token: nil) }
     end
 
+    def test_token_authorization
+      client = Fulfil::Client.new(subdomain: 'test', token: '123')
+
+      assert_predicate client, :valid?
+    end
+
+    def test_api_key_authorization
+      client = Fulfil::Client.new(subdomain: 'test', api_key: '123')
+
+      assert_predicate client, :valid?
+    end
+
     def test_find_one
       stub_fulfil_get('sale.sale/213112', 'sale_sale')
 
