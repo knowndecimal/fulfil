@@ -11,7 +11,7 @@ module Fulfil
   class Client
     class InvalidClientError < StandardError
       def message
-        'Client is not configured correctly.'
+        super() || 'Client is not configured correctly.'
       end
     end
 
@@ -23,12 +23,17 @@ module Fulfil
 
     class ResponseError < StandardError; end
 
-    def initialize(subdomain: SUBDOMAIN, token: oauth_token, headers: { 'X-API-KEY' => API_KEY }, debug: false)
+    def initialize(subdomain: SUBDOMAIN, token: oauth_token, api_key: API_KEY, debug: false)
       @subdomain = subdomain
-      @token = token
       @debug = debug
-      @headers = headers
-      @headers.delete('X-API-KEY') if @token
+
+      if token
+        @token = token
+      elsif api_key
+        @api_key = api_key
+      else
+        raise InvalidClientError, 'No token or API key provided.'
+      end
 
       raise InvalidClientError if invalid?
     end
@@ -177,7 +182,8 @@ module Fulfil
     def client
       client = HTTP.use(logging: @debug ? { logger: config.logger } : {})
       client = client.auth("Bearer #{@token}") if @token
-      client.headers(@headers)
+      client.headers({ 'X-API-KEY': @api_key }) if @api_key
+      client
     end
 
     def config
