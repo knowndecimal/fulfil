@@ -1,3 +1,30 @@
+## 0.8.0
+
+* Add rubocop by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/35
+* Remove _now from testing example by @swanny85 in https://github.com/knowndecimal/fulfil/pull/32
+* Add SimpleCov for test coverage by @cdmwebs in https://github.com/knowndecimal/fulfil/pull/38
+* Add support for Fulfil sale duplication by @swanny85 in https://github.com/knowndecimal/fulfil/pull/48
+
+## 0.6.1
+
+* Fixes a typo in the examples of the readme by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/25
+* Fix requiring gemfiles manually by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/27
+
+## 0.6.0
+
+* Streamline the usage of environment variables. by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/18
+* Update http requirement from ~> 4.4.1 to >= 4.4.1, < 5.1.0 by @dependabot in https://github.com/knowndecimal/fulfil/pull/12
+* Remove extremely precise User-Agent from mocks. by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/20
+* Use GitHub Actions instead of Travis CI and Circle CI by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/21
+* Remove persistent connection and client caching by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/22
+* Add rate limit detection by @stefanvermaas in https://github.com/knowndecimal/fulfil/pull/24
+
+## 0.5.0
+
+* Better response parsing and error handling.
+* Documentation updates.
+* Add release script.
+
 ## 0.4.9
 
 * Add client tests and stub with Webmock.
