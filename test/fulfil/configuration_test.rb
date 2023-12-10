@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Fulfil
-  class ConfigurationTest < MiniTest::Test
+  class ConfigurationTest < Minitest::Test
     def test_retry_on_rate_limit?
       refute_predicate Fulfil.config, :retry_on_rate_limit?
 
