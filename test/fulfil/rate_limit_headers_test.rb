@@ -9,7 +9,7 @@ module Fulfil
 
       assert_equal Fulfil::RateLimitHeaders::DEFAULT_REQUEST_LIMIT, headers.limit
       assert_equal Fulfil::RateLimitHeaders::DEFAULT_REQUESTS_LEFT, headers.requests_left
-      assert_equal Fulfil::RateLimitHeaders::DEFAULT_RESETS_AT, headers.resets_at
+      assert_nil Fulfil::RateLimitHeaders::DEFAULT_RESETS_AT
     end
 
     def test_rate_limit_assignments
