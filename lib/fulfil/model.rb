@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fulfil/query'
+require 'fulfil/conversions'
 
 module Fulfil
   class Model
@@ -28,6 +29,8 @@ module Fulfil
       offset: nil,
       sort: nil
     )
+      domain = convert_date_and_datetime_fields(domain)
+
       @client.search(
         model: model,
         domain: domain,
@@ -39,6 +42,8 @@ module Fulfil
     end
 
     def count(domain:)
+      domain = convert_date_and_datetime_fields(domain)
+
       @client.count(model: model_name, domain: domain)
     end
 
@@ -83,6 +88,12 @@ module Fulfil
           model[source_keys.first] = filtered_models
         end
       end
+    end
+
+    private
+
+    def convert_date_and_datetime_fields(domain)
+      Fulfil::Conversions.update_date_and_datetime_fields(domain)
     end
   end
 end
