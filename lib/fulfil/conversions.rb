@@ -18,7 +18,7 @@ module Fulfil
 
       def datetime_as_object(datetime)
         {
-          __class__: "datetime",
+          __class__: 'datetime',
           iso_string: datetime.new_offset(0).iso8601
         }
       end
