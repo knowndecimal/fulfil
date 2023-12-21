@@ -1,4 +1,11 @@
+# frozen_string_literal: true
+
 module Fulfil
+  # The Fulfil::Conversions module provides utility methods for converting
+  # Date and DateTime objects into a standardized hash format.
+  # The module iterates over given parameters, identifies
+  # Date and DateTime objects, and converts them into a hash with a class descriptor
+  # and an ISO 8601 formatted string.
   class Conversions
     class << self
       def update_date_and_datetime_fields(domain)
