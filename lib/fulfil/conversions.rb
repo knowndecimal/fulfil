@@ -3,15 +3,21 @@ module Fulfil
     class << self
       def update_date_and_datetime_fields(domain)
         domain.each do |params|
-          params.map! do |param|
-            case param
-            when Date
-              date_as_object(param)
-            when DateTime
-              datetime_as_object(param)
-            else
-              param
-            end
+          update_date_and_datetime_fields_in_params(params)
+        end
+      end
+
+      private
+
+      def update_date_and_datetime_fields_in_params(params)
+        params.map! do |param|
+          case param
+          when Date
+            date_as_object(param)
+          when DateTime
+            datetime_as_object(param)
+          else
+            param
           end
         end
       end
