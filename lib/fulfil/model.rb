@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'fulfil/query'
-require 'fulfil/conversions'
 
 module Fulfil
   class Model
@@ -29,7 +28,6 @@ module Fulfil
       offset: nil,
       sort: nil
     )
-      domain = Fulfil::Conversions.update_date_and_datetime_fields(domain)
 
       @client.search(
         model: model,
@@ -42,8 +40,6 @@ module Fulfil
     end
 
     def count(domain:)
-      domain = Fulfil::Conversions.update_date_and_datetime_fields(domain)
-
       @client.count(model: model_name, domain: domain)
     end
 
