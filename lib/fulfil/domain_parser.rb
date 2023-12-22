@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require 'fulfil/converter'
+
 module Fulfil
-  # The Fulfil::Domain module provides utility methods for converting
+  # The Fulfil::DomainParser module provides utility methods for converting
   # Date and DateTime objects into a standardized hash format.
   # The module iterates over given parameters, identifies
   # Date and DateTime objects, and converts them into a hash with a class descriptor
@@ -37,28 +39,15 @@ module Fulfil
       end
     end
 
+    private
+
     def date_as_object(date)
-      DomainParser.date_as_object(date)
+      Converter.date_as_object(date)
     end
 
     def datetime_as_object(datetime)
-      DomainParser.datetime_as_object(datetime)
+      Converter.datetime_as_object(datetime)
     end
-
-    class << self
-      def datetime_as_object(datetime)
-        {
-          __class__: 'datetime',
-          iso_string: datetime.new_offset(0).iso8601
-        }
-      end
-
-      def date_as_object(date)
-        datetime_as_object(date.to_datetime)
-      end
-    end
-
-    private
 
     def disable_escape_html_entities
       return unless defined?(ActiveSupport) && ActiveSupport.respond_to?(:escape_html_entities_in_json=)
