@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'date'
+require 'fulfil/converter'
+
 module Fulfil
   class Query
     def initialize
@@ -86,11 +89,25 @@ module Fulfil
           [[key, 'ilike', value]]
         end
       when 'Hash'
+        handle_hash(field, key, value, options)
+      when 'Date', 'DateTime'
+        [[key, '=', Converter.date_or_datetime_as_object(value)]]
+      else
+        raise "Unhandled value type: #{value} (#{value.class.name})"
+      end
+    end
+
+    def handle_hash(field, key, value, options)
+      if %i[gte gt lte lt].any? { |op| value.key?(op) }
+        value.map do |operator, val|
+          op_map = { gte: '>=', gt: '>', lte: '<=', lt: '<' }
+          converted_value = Converter.date_or_datetime_as_object(val)
+          [key, op_map[operator], converted_value]
+        end
+      else
         value.flat_map do |nested_field, nested_value|
           build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
         end
-      else
-        raise "Unhandled value type: #{value} (#{value.class.name})"
       end
     end
 

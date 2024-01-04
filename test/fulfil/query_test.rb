@@ -2,7 +2,10 @@
 
 require 'minitest/autorun'
 require 'fulfil/query'
+require 'fulfil/converter'
+require 'date'
 
+# rubocop:disable Metrics/ClassLength
 module Fulfil
   class QueryTest < Minitest::Test
     def setup
@@ -47,6 +50,32 @@ module Fulfil
       assert_equal [['sale.id', 'in', [123]]], @query.query
     end
 
+    def test_dates_are_converted_to_iso8601
+      date = Date.new(2019, 1, 1)
+      expected_date_format = Converter.date_as_object(date)
+
+      @query.search(date: date)
+
+      assert_equal [['date', '=', expected_date_format]], @query.query
+    end
+
+    def test_date_greater_than_or_equal_to_converted_to_iso8601
+      date = Date.new(2019, 1, 1)
+      expected_date_format = Converter.date_as_object(date)
+
+      @query.search(date: { gte: date })
+
+      assert_equal [['date', '>=', expected_date_format]], @query.query
+    end
+
+    def test_datetime_less_than_converted_to_iso8601
+      datetime = DateTime.new(2019, 1, 1, 0, 0, 0)
+      expected_datetime_format = Converter.datetime_as_object(datetime)
+
+      @query.search(datetime: { lt: datetime })
+
+      assert_equal [['datetime', '<', expected_datetime_format]], @query.query
+    end
     # -- #exclude -----------------------
 
     def test_equals_exclude
@@ -183,3 +212,4 @@ module Fulfil
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
