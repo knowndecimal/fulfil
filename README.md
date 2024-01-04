@@ -127,6 +127,14 @@ report = Fulfil::Report.new(client: fulfil, report_name: 'account.tax.summary.ir
 report.execute(start_date: Date.new(2020, 12, 1), end_date: Date.new(2020, 12, 31))
 ```
 
+## Date Ranges
+Fulfil expects an ISO8601 date when retrieving a date range.  The GEM will take a `date` or `datetime` and parse it into the object Fulfil expects.
+
+```
+datetime = DateTime.new(2024, 1, 1, 12, 0, 0)
+fulfil_model.search(domain: [['create_date', '>=', datetime]])
+```
+
 ## Rate limits
 
 Fulfil's API applies rate limits to the API requests that it receives. Every request is subject to throttling under the general limits. In addition, there are resource-based rate limits and throttles.

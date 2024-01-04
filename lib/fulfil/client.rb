@@ -3,6 +3,7 @@
 require 'http'
 require 'logger'
 require 'fulfil/response_parser'
+require 'fulfil/domain_parser'
 
 module Fulfil
   SUBDOMAIN = ENV.fetch('FULFIL_SUBDOMAIN', nil)
@@ -69,7 +70,8 @@ module Fulfil
 
     def search(model:, domain:, offset: nil, limit: 100, sort: nil, fields: %w[id])
       uri = URI("#{model_url(model: model)}/search_read")
-      body = [domain, offset, limit, sort, fields]
+      parsed_domain = Fulfil::DomainParser.new(domain).parsed
+      body = [parsed_domain, offset, limit, sort, fields]
 
       results = request(verb: :put, endpoint: uri, json: body)
       parse(results: results)
@@ -77,7 +79,8 @@ module Fulfil
 
     def count(model:, domain:)
       uri = URI("#{model_url(model: model)}/search_count")
-      body = [domain]
+      parsed_domain = Fulfil::DomainParser.new(domain).parsed
+      body = [parsed_domain]
 
       request(verb: :put, endpoint: uri, json: body)
     end

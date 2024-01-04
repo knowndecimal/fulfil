@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'date'
 
 module Fulfil
   class ClientTest < Minitest::Test
@@ -66,6 +67,82 @@ module Fulfil
         assert_raises Fulfil::RateLimitExceeded do
           Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id)
         end
+      end
+    end
+
+    def test_date_conversion_in_search
+      date = Date.new(2022, 1, 1)
+      datetime = date.to_datetime
+      utc_datetime = datetime.new_offset(0)
+      expected_formatted_date = {
+        __class__: 'datetime',
+        iso_string: utc_datetime.iso8601
+      }
+
+      # Convert the expected hash's symbol keys to strings for comparison
+      expected_formatted_date_with_string_keys = expected_formatted_date.transform_keys(&:to_s)
+
+      stub_request(:put, fulfil_url_for('sale.sale/search_read'))
+        .to_return(status: 200, body: [].to_json, headers: { 'Content-Type' => 'application/json' })
+
+      client = Fulfil::Client.new
+      fulfil_model = Fulfil::Model.new(client: client, model_name: 'sale.sale')
+      fulfil_model.search(domain: [['create_date', '>=', date]])
+
+      assert_requested(:put, fulfil_url_for('sale.sale/search_read'), times: 1) do |request|
+        actual_formatted_date = JSON.parse(request.body).dig(0, 0, 2)
+
+        assert_equal expected_formatted_date_with_string_keys, actual_formatted_date
+      end
+    end
+
+    def test_datetime_conversion_in_search
+      datetime = DateTime.new(2022, 1, 1, 12, 0, 0)
+      utc_datetime = datetime.new_offset(0)
+      expected_formatted_date = {
+        __class__: 'datetime',
+        iso_string: utc_datetime.iso8601
+      }
+
+      # Convert the expected hash's symbol keys to strings for comparison
+      expected_formatted_date_with_string_keys = expected_formatted_date.transform_keys(&:to_s)
+
+      stub_request(:put, fulfil_url_for('sale.sale/search_read'))
+        .to_return(status: 200, body: [].to_json, headers: { 'Content-Type' => 'application/json' })
+
+      client = Fulfil::Client.new
+      fulfil_model = Fulfil::Model.new(client: client, model_name: 'sale.sale')
+      fulfil_model.search(domain: [['create_date', '>=', datetime]])
+
+      assert_requested(:put, fulfil_url_for('sale.sale/search_read'), times: 1) do |request|
+        actual_formatted_date = JSON.parse(request.body).dig(0, 0, 2)
+
+        assert_equal expected_formatted_date_with_string_keys, actual_formatted_date
+      end
+    end
+
+    def test_datetime_conversion_in_count
+      datetime = DateTime.new(2022, 1, 1, 12, 0, 0)
+      utc_datetime = datetime.new_offset(0)
+      expected_formatted_date = {
+        __class__: 'datetime',
+        iso_string: utc_datetime.iso8601
+      }
+
+      # Convert the expected hash's symbol keys to strings for comparison
+      expected_formatted_date_with_string_keys = expected_formatted_date.transform_keys(&:to_s)
+
+      stub_request(:put, fulfil_url_for('sale.sale/search_count'))
+        .to_return(status: 200, body: [].to_json, headers: { 'Content-Type' => 'application/json' })
+
+      client = Fulfil::Client.new
+      fulfil_model = Fulfil::Model.new(client: client, model_name: 'sale.sale')
+      fulfil_model.count(domain: [['create_date', '>=', datetime]])
+
+      assert_requested(:put, fulfil_url_for('sale.sale/search_count'), times: 1) do |request|
+        actual_formatted_date = JSON.parse(request.body).dig(0, 0, 2)
+
+        assert_equal expected_formatted_date_with_string_keys, actual_formatted_date
       end
     end
   end

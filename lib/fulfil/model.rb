@@ -28,6 +28,7 @@ module Fulfil
       offset: nil,
       sort: nil
     )
+
       @client.search(
         model: model,
         domain: domain,
