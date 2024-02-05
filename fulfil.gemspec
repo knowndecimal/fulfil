@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = 'lib'
   spec.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
 
-  spec.add_dependency 'http', '>= 4.4.1', '< 5.2.0'
+  spec.add_dependency 'http', '>= 4.4.1', '< 5.3.0'
 end
