@@ -12,12 +12,10 @@ module Fulfil
       lt: '<'
     }.freeze
 
+    attr_reader :query
+
     def initialize
       @query = []
-    end
-
-    def query
-      @query
     end
 
     def search(*args)
