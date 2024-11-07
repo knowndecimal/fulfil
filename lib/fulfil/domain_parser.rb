@@ -4,6 +4,8 @@ require 'fulfil/converter'
 require 'fulfil/concerns/html_entity_handler'
 
 module Fulfil
+  # Parses domain arrays and converts Date/DateTime objects into Fulfil's expected format
+  # Handles the conversion of Ruby objects to Fulfil-compatible JSON structures
   class DomainParser
     include Concerns::HtmlEntityHandler
 
