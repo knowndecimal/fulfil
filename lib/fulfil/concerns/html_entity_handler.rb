@@ -2,6 +2,21 @@
 
 module Fulfil
   module Concerns
+    # Handles HTML entity escaping in JSON serialization
+    # This module provides methods to temporarily disable and re-enable HTML entity escaping
+    # when working with ActiveSupport's JSON encoding, which is particularly useful when
+    # dealing with special characters in API requests.
+    #
+    # @example
+    #   class MyParser
+    #     include Concerns::HtmlEntityHandler
+    #
+    #     def parse_data
+    #       with_disabled_html_entities do
+    #         # Your code here that needs HTML entities disabled
+    #       end
+    #     end
+    #   end
     module HtmlEntityHandler
       private
 
