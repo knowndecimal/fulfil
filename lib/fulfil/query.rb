@@ -5,12 +5,19 @@ require 'fulfil/converter'
 
 module Fulfil
   class Query
+    OPERATOR_MAP = {
+      gte: '>=',
+      gt: '>',
+      lte: '<=',
+      lt: '<'
+    }.freeze
+
     def initialize
-      @matchers = []
+      @query = []
     end
 
     def query
-      @matchers
+      @query
     end
 
     def search(*args)
@@ -20,7 +27,7 @@ module Fulfil
         arg.each do |field, value|
           next if value == options
 
-          @matchers.concat(build_search_term(field: field, value: value, options: options))
+          @query.concat(build_search_term(field: field, value: value, options: options))
         end
       end
 
@@ -39,9 +46,9 @@ module Fulfil
       end
 
       if terms.length > 1
-        @matchers.push(['OR'].concat(terms))
+        @query.push(['OR'].concat(terms))
       else
-        @matchers.concat(terms.first)
+        @query.concat(terms.first)
       end
 
       self
@@ -98,16 +105,22 @@ module Fulfil
     end
 
     def handle_hash(field, key, value, options)
-      if %i[gte gt lte lt].any? { |op| value.key?(op) }
-        value.map do |operator, val|
-          op_map = { gte: '>=', gt: '>', lte: '<=', lt: '<' }
-          converted_value = Converter.date_or_datetime_as_object(val)
-          [key, op_map[operator], converted_value]
-        end
+      if OPERATOR_MAP.keys.any? { |op| value.key?(op) }
+        handle_operator_comparison(key, value)
       else
-        value.flat_map do |nested_field, nested_value|
-          build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
-        end
+        handle_nested_fields(field, value, options)
+      end
+    end
+
+    def handle_operator_comparison(key, value)
+      value.map do |operator, val|
+        [key, OPERATOR_MAP[operator], Converter.date_or_datetime_as_object(val)]
+      end
+    end
+
+    def handle_nested_fields(field, value, options)
+      value.flat_map do |nested_field, nested_value|
+        build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
       end
     end
 
