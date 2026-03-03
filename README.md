@@ -1,5 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/fulfil-io.svg)](https://badge.fury.io/rb/fulfil-io)
 [![Tests](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml/badge.svg)](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml)
+[![Code Coverage](https://qlty.sh/gh/knowndecimal/projects/fulfil/coverage.svg)](https://qlty.sh/gh/knowndecimal/projects/fulfil)
 
 # Fulfil.io Rubygem
 
