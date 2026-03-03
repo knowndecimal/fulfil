@@ -11,7 +11,7 @@ module Fulfil
   class Client
     class InvalidClientError < StandardError
       def message
-        super() || 'Client is not configured correctly.'
+        super || 'Client is not configured correctly.'
       end
     end
 
@@ -29,9 +29,9 @@ module Fulfil
 
       normalized_api_key = api_key || headers&.[]('X-API-KEY') || headers&.[]('X-Api-Key')
 
-      if present?(token)
+      if !token.to_s.empty?
         @token = token
-      elsif present?(normalized_api_key)
+      elsif !normalized_api_key.to_s.empty?
         @api_key = normalized_api_key
       else
         raise InvalidClientError, 'No token or API key provided.'
@@ -128,10 +128,6 @@ module Fulfil
       ENV['FULFIL_OAUTH_TOKEN'] || ENV.fetch('FULFIL_TOKEN', nil)
     end
 
-    def present?(value)
-      !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
-    end
-
     def parse(result: nil, results: [])
       if result
         parse_single(result: result)
@@ -166,12 +162,10 @@ module Fulfil
 
       response.parse
     rescue HTTP::ConnectionError => e
-      puts "Couldn't connect"
       raise ConnectionError, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => e
       raise ResponseError, "Can't process response: #{e}"
     rescue HTTP::Error => e
-      puts e
       raise UnknownHTTPError, 'Unhandled HTTP error encountered'
     # If configured, the client will wait whenever the `RateLimitExceeded` exception
     # is raised. Check `Fulfil::Configuration` for more details.

@@ -1,6 +1,8 @@
 ## main
 
-* BREAKING: removes the `headers` param and replaces with `api_key`.
+* Auth cleanup: support explicit `api_key` while keeping backwards compatibility for `headers: { 'X-API-KEY' => ... }`.
+* Fix auth selection to ignore blank tokens and correctly fall back to API key authentication.
+* Fix client HTTP error rescue ordering so specific connection/response errors are raised correctly.
 
 ## 0.8.1
 
