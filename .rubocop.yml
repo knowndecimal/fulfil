@@ -13,6 +13,8 @@ inherit_from: .rubocop_todo.yml
 
 plugins:
   - rubocop-minitest
+
+require:
   - rubocop-performance
 
 AllCops:
