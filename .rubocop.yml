@@ -21,8 +21,11 @@ AllCops:
     - vendor/**/*
   NewCops: enable
   SuggestExtensions: false
-  TargetRubyVersion: 3.2
+  TargetRubyVersion: 2.7
 
 Style/ClassAndModuleChildren:
   Exclude:
     - test/test_helper.rb
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
