@@ -2,6 +2,10 @@ name: Tests
 
 on: [push]
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   minitest:
     strategy:
@@ -25,10 +29,12 @@ jobs:
           cp .env.example .env
           bin/rake test
 
-      - name: Code Climate Coverage Action
-        uses: paambaati/codeclimate-action@v3.0.0
-        env:
-          CC_TEST_REPORTER_ID: b358904aab0061aa522f50917cb78091c0fab23ab0b72bbbee3f854c00d7435c
+      - name: Qlty Coverage Upload
+        if: matrix.ruby-version == '3.2'
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: coverage/coverage.json
 
   linters:
     runs-on: ubuntu-latest
