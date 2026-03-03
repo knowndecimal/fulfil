@@ -11,8 +11,10 @@ inherit_from: .rubocop_todo.yml
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
-require:
+plugins:
   - rubocop-minitest
+
+require:
   - rubocop-performance
 
 AllCops:
@@ -26,3 +28,6 @@ AllCops:
 Style/ClassAndModuleChildren:
   Exclude:
     - test/test_helper.rb
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false

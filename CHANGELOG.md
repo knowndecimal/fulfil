@@ -1,8 +1,12 @@
 ## main
 
+* Drop legacy Ruby support and require Ruby 3.2+.
+* Update CI matrix to supported Rubies (3.2, 3.3, 3.4).
+* Migrate coverage uploads from Code Climate to Qlty.
+* Update runtime and development dependencies.
 * Auth cleanup: support explicit `api_key` while keeping backwards compatibility for `headers: { 'X-API-KEY' => ... }`.
 * Fix auth selection to ignore blank tokens and correctly fall back to API key authentication.
-* Fix client HTTP error rescue ordering so specific connection/response errors are raised correctly.
+* Improve HTTP error handling and rescue ordering so specific connection/response errors are raised correctly.
 
 ## 0.8.1
 
