@@ -30,7 +30,7 @@ class ResponseHandlerTest < Minitest::Test
     end
 
     def status
-      "#{@status_code}"
+      @status_code.to_s
     end
 
     def parse
