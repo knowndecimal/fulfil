@@ -1,4 +1,4 @@
-## main
+## 0.9.0
 
 * Drop legacy Ruby support and require Ruby 3.2+.
 * Update CI matrix to supported Rubies (3.2, 3.3, 3.4).
