@@ -1,11 +1,14 @@
 [![Gem Version](https://badge.fury.io/rb/fulfil-io.svg)](https://badge.fury.io/rb/fulfil-io)
 [![Tests](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml/badge.svg)](https://github.com/knowndecimal/fulfil/actions/workflows/tests.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/c6100940d3debd3a3a7c/maintainability)](https://codeclimate.com/github/knowndecimal/fulfil/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/c6100940d3debd3a3a7c/test_coverage)](https://codeclimate.com/github/knowndecimal/fulfil/test_coverage)
+[![Code Coverage](https://qlty.sh/gh/knowndecimal/projects/fulfil/coverage.svg)](https://qlty.sh/gh/knowndecimal/projects/fulfil)
 
 # Fulfil.io Rubygem
 
 A Ruby library for the [Fulfil.io](https://fulfil.io) API.
+
+## Requirements
+
+- Ruby 3.2+
 
 ## Installation
 
@@ -31,14 +34,15 @@ Or install it yourself as:
 
 Environment variables:
 
-- **FULFIL_SUBDOMAIN:** - always required to use the gem.
-- **FULFIL_OAUTH_TOKEN:** required for oauth bearer authentication
-- **FULFIL_API_KEY:** required for authentication via the `X-API-KEY` request
-  header. This is used with the Personal Access Token authentication method.
+- **FULFIL_SUBDOMAIN:** always required.
+- **FULFIL_OAUTH_TOKEN:** for OAuth bearer authentication.
+- **FULFIL_API_KEY:** for Personal Access Token authentication (sent as `X-API-KEY`).
 
-> **Note:** When `FULFIL_OAUTH_TOKEN` is present, the `FULFIL_API_KEY` will be ignored. So,
-if oauth doesn't work, returning an Unauthorized error, to use the
-`FULFIL_API_KEY`, the `FULFIL_OAUTH_TOKEN` shouldn't be specified.
+Authentication behavior:
+
+- OAuth token takes precedence when both token and API key are present.
+- To force API key auth, unset `FULFIL_OAUTH_TOKEN`.
+- You can also pass credentials directly to `Fulfil::Client.new`.
 
 ```ruby
 fulfil = Fulfil::Client.new # or, to enable request debugging, Fulfil::Client.new(debug: true)
@@ -74,12 +78,23 @@ pp sales
 #   "rec_name"=>""}]
 ```
 
-To configure a client without using environment variables, pass them as arguments:
+To configure a client without using environment variables, pass credentials directly:
+
+With API key (preferred shortcut):
 
 ```ruby
 client = Fulfil::Client.new(
   subdomain: 'test',
   api_key: '123'
+)
+```
+
+Equivalent API key form via headers (backwards compatible):
+
+```ruby
+client = Fulfil::Client.new(
+  subdomain: 'test',
+  headers: { 'X-API-KEY' => '123' }
 )
 ```
 
