@@ -12,12 +12,13 @@ class ResponseHandlerTest < Minitest::Test
 
   # The `ResponseMock` mimicks the `Http::Response` class.
   class ResponseMock
-    def initialize(status_code:)
+    def initialize(status_code:, parsed_body: {})
       @status_code = status_code
+      @parsed_body = parsed_body
     end
 
     def body
-      {}
+      @parsed_body
     end
 
     def code
@@ -29,11 +30,11 @@ class ResponseHandlerTest < Minitest::Test
     end
 
     def status
-      Fulfil::ResponseHandler::HTTP_ERROR_CODES[@status_code].to_s.split('::').last
+      "#{@status_code}"
     end
 
     def parse
-      {}
+      @parsed_body
     end
   end
 
@@ -61,5 +62,35 @@ class ResponseHandlerTest < Minitest::Test
         assert Fulfil::ResponseHandler.new(response).verify!
       end
     end
+  end
+
+  def test_prefers_fulfil_error_payload_message_and_metadata
+    payload = {
+      'type' => 'UserError',
+      'code' => 'E1000',
+      'message' => "Cannot create record with state 'open'. Allowed states: draft",
+      'description' => ''
+    }
+
+    response = ResponseMock.new(status_code: 400, parsed_body: payload)
+
+    error = assert_raises(Fulfil::HttpError::BadRequest) do
+      Fulfil::ResponseHandler.new(response).verify!
+    end
+
+    assert_equal "[E1000] UserError: Cannot create record with state 'open'. Allowed states: draft", error.message
+    assert_equal payload, error.metadata[:parsed_body]
+    assert_equal 'E1000', error.metadata[:code]
+    assert_equal 'UserError', error.metadata[:type]
+  end
+
+  def test_falls_back_to_generic_message_when_payload_is_empty
+    response = ResponseMock.new(status_code: 400, parsed_body: {})
+
+    error = assert_raises(Fulfil::HttpError::BadRequest) do
+      Fulfil::ResponseHandler.new(response).verify!
+    end
+
+    assert_equal 'Fulfil request failed (HTTP 400)', error.message
   end
 end
