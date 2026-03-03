@@ -23,14 +23,16 @@ module Fulfil
 
     class ResponseError < StandardError; end
 
-    def initialize(subdomain: SUBDOMAIN, token: oauth_token, api_key: API_KEY, debug: false)
+    def initialize(subdomain: SUBDOMAIN, token: oauth_token, api_key: API_KEY, headers: nil, debug: false)
       @subdomain = subdomain
       @debug = debug
 
-      if token
+      normalized_api_key = api_key || headers&.[]('X-API-KEY') || headers&.[]('X-Api-Key')
+
+      if present?(token)
         @token = token
-      elsif api_key
-        @api_key = api_key
+      elsif present?(normalized_api_key)
+        @api_key = normalized_api_key
       else
         raise InvalidClientError, 'No token or API key provided.'
       end
@@ -126,6 +128,10 @@ module Fulfil
       ENV['FULFIL_OAUTH_TOKEN'] || ENV.fetch('FULFIL_TOKEN', nil)
     end
 
+    def present?(value)
+      !value.nil? && !(value.respond_to?(:empty?) && value.empty?)
+    end
+
     def parse(result: nil, results: [])
       if result
         parse_single(result: result)
@@ -159,15 +165,14 @@ module Fulfil
       Fulfil::ResponseHandler.new(response).verify!
 
       response.parse
-    rescue HTTP::Error => e
-      puts e
-      raise UnknownHTTPError, 'Unhandled HTTP error encountered'
     rescue HTTP::ConnectionError => e
       puts "Couldn't connect"
       raise ConnectionError, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => e
       raise ResponseError, "Can't process response: #{e}"
-      []
+    rescue HTTP::Error => e
+      puts e
+      raise UnknownHTTPError, 'Unhandled HTTP error encountered'
     # If configured, the client will wait whenever the `RateLimitExceeded` exception
     # is raised. Check `Fulfil::Configuration` for more details.
     rescue RateLimitExceeded => e
@@ -180,7 +185,7 @@ module Fulfil
     def client
       client = HTTP.use(logging: @debug ? { logger: config.logger } : {})
       client = client.auth("Bearer #{@token}") if @token
-      client.headers({ 'X-API-KEY': @api_key }) if @api_key
+      client = client.headers({ 'X-API-KEY': @api_key }) if @api_key
       client
     end
 
