@@ -32,7 +32,8 @@ Environment variables:
 
 - **FULFIL_SUBDOMAIN:** - always required to use the gem.
 - **FULFIL_OAUTH_TOKEN:** required for oauth bearer authentication
-- **FULFIL_API_KEY:** required for authentication via the `X-API-KEY` request header
+- **FULFIL_API_KEY:** required for authentication via the `X-API-KEY` request
+  header. This is used with the Personal Access Token authentication method.
 
 > **Note:** When `FULFIL_OAUTH_TOKEN` is present, the `FULFIL_API_KEY` will be ignored. So,
 if oauth doesn't work, returning an Unauthorized error, to use the
@@ -70,6 +71,24 @@ pp sales
 #    [{"id"=>311, "unit_price"=>34.95},
 #     {"id"=>313, "unit_price"=>0.0}],
 #   "rec_name"=>""}]
+```
+
+To configure a client without using environment variables, pass them as arguments:
+
+```ruby
+client = Fulfil::Client.new(
+  subdomain: 'test',
+  api_key: '123'
+)
+```
+
+With an OAuth token:
+
+```ruby
+client = Fulfil::Client.new(
+  subdomain: 'test',
+  token: '123'
+)
 ```
 
 ### Count

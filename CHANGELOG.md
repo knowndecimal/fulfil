@@ -1,3 +1,9 @@
+## main
+
+* Auth cleanup: support explicit `api_key` while keeping backwards compatibility for `headers: { 'X-API-KEY' => ... }`.
+* Fix auth selection to ignore blank tokens and correctly fall back to API key authentication.
+* Fix client HTTP error rescue ordering so specific connection/response errors are raised correctly.
+
 ## 0.8.1
 
 * Add logger to configuration by @cdmwebs in https://github.com/knowndecimal/fulfil/pull/49

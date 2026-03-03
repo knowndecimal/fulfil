@@ -8,6 +8,39 @@ module Fulfil
       assert_raises('InvalidClientError') { Fulfil::Client.new(subdomain: nil, token: nil) }
     end
 
+    def test_token_authorization
+      client = Fulfil::Client.new(subdomain: 'test', token: '123')
+
+      assert_predicate client, :valid?
+    end
+
+    def test_api_key_authorization
+      client = Fulfil::Client.new(subdomain: 'test', api_key: '123')
+
+      assert_predicate client, :valid?
+    end
+
+    def test_headers_keyword_api_key_authorization
+      client = Fulfil::Client.new(subdomain: 'test', headers: { 'X-API-KEY' => '123' })
+
+      assert_predicate client, :valid?
+    end
+
+    def test_blank_token_falls_back_to_api_key
+      sale_id = 213_112
+
+      stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
+        .with do |request|
+          request.headers['X-Api-Key'] == '123' && !request.headers.key?('Authorization')
+        end
+        .to_return(status: 200, body: load_fixture('sale_sale'), headers: valid_response_headers)
+
+      client = Fulfil::Client.new(token: '', api_key: '123')
+      response = client.find_one(model: 'sale.sale', id: sale_id)
+
+      assert_equal sale_id, response['id']
+    end
+
     def test_find_one
       stub_fulfil_get('sale.sale/213112', 'sale_sale')
 
@@ -65,6 +98,30 @@ module Fulfil
 
         assert_raises Fulfil::RateLimitExceeded do
           Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id)
+        end
+      end
+    end
+
+    def test_connection_error_maps_to_connection_error
+      client = Fulfil::Client.new(subdomain: 'test', token: '123')
+      transport = Object.new
+      transport.define_singleton_method(:request) { |_verb, _endpoint, _args| raise HTTP::ConnectionError, 'boom' }
+
+      assert_raises Fulfil::Client::ConnectionError do
+        client.stub(:client, transport) do
+          client.send(:request, endpoint: URI('https://example.com'))
+        end
+      end
+    end
+
+    def test_response_error_maps_to_response_error
+      client = Fulfil::Client.new(subdomain: 'test', token: '123')
+      transport = Object.new
+      transport.define_singleton_method(:request) { |_verb, _endpoint, _args| raise HTTP::ResponseError, 'boom' }
+
+      assert_raises Fulfil::Client::ResponseError do
+        client.stub(:client, transport) do
+          client.send(:request, endpoint: URI('https://example.com'))
         end
       end
     end

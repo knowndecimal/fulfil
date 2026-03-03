@@ -11,7 +11,7 @@ module Fulfil
   class Client
     class InvalidClientError < StandardError
       def message
-        'Client is not configured correctly.'
+        super || 'Client is not configured correctly.'
       end
     end
 
@@ -23,12 +23,19 @@ module Fulfil
 
     class ResponseError < StandardError; end
 
-    def initialize(subdomain: SUBDOMAIN, token: oauth_token, headers: { 'X-API-KEY' => API_KEY }, debug: false)
+    def initialize(subdomain: SUBDOMAIN, token: oauth_token, api_key: API_KEY, headers: nil, debug: false)
       @subdomain = subdomain
-      @token = token
       @debug = debug
-      @headers = headers
-      @headers.delete('X-API-KEY') if @token
+
+      normalized_api_key = api_key || headers&.[]('X-API-KEY') || headers&.[]('X-Api-Key')
+
+      if !token.to_s.empty?
+        @token = token
+      elsif !normalized_api_key.to_s.empty?
+        @api_key = normalized_api_key
+      else
+        raise InvalidClientError, 'No token or API key provided.'
+      end
 
       raise InvalidClientError if invalid?
     end
@@ -150,21 +157,16 @@ module Fulfil
     end
 
     def request(endpoint:, verb: :get, **args)
-      raise InvalidClientError if invalid?
-
       response = client.request(verb, endpoint, args)
       Fulfil::ResponseHandler.new(response).verify!
 
       response.parse
-    rescue HTTP::Error => e
-      puts e
-      raise UnknownHTTPError, 'Unhandled HTTP error encountered'
     rescue HTTP::ConnectionError => e
-      puts "Couldn't connect"
       raise ConnectionError, "Can't connect to #{base_url}"
     rescue HTTP::ResponseError => e
       raise ResponseError, "Can't process response: #{e}"
-      []
+    rescue HTTP::Error => e
+      raise UnknownHTTPError, 'Unhandled HTTP error encountered'
     # If configured, the client will wait whenever the `RateLimitExceeded` exception
     # is raised. Check `Fulfil::Configuration` for more details.
     rescue RateLimitExceeded => e
@@ -177,7 +179,8 @@ module Fulfil
     def client
       client = HTTP.use(logging: @debug ? { logger: config.logger } : {})
       client = client.auth("Bearer #{@token}") if @token
-      client.headers(@headers)
+      client = client.headers({ 'X-API-KEY': @api_key }) if @api_key
+      client
     end
 
     def config
