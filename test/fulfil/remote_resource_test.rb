@@ -31,7 +31,12 @@ module Fulfil
         TestRemoteResource.all(ids: [1, 2], domain: [['active', '=', true]])
       end
 
-      assert_equal({ domain: [['active', '=', true], ['id', 'in', [1, 2]]], fields: %w[id name] }, model.captured_kwargs)
+      expected_query = {
+        domain: [['active', '=', true], ['id', 'in', [1, 2]]],
+        fields: %w[id name]
+      }
+
+      assert_equal expected_query, model.captured_kwargs
       assert_equal 2, resources.size
       assert_equal 'A', resources.first.name
     end
@@ -55,8 +60,8 @@ module Fulfil
     end
 
     def test_persisted
-      assert TestRemoteResource.new(id: 12).persisted?
-      refute TestRemoteResource.new.persisted?
+      assert_predicate TestRemoteResource.new(id: 12), :persisted?
+      refute_predicate TestRemoteResource.new, :persisted?
     end
 
     def test_equality
