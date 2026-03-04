@@ -1,13 +1,21 @@
 # frozen_string_literal: true
 
+require 'date'
+require 'fulfil/converter'
+
 module Fulfil
   class Query
-    def initialize
-      @matchers = []
-    end
+    OPERATOR_MAP = {
+      gte: '>=',
+      gt: '>',
+      lte: '<=',
+      lt: '<'
+    }.freeze
 
-    def query
-      @matchers
+    attr_reader :query
+
+    def initialize
+      @query = []
     end
 
     def search(*args)
@@ -17,7 +25,7 @@ module Fulfil
         arg.each do |field, value|
           next if value == options
 
-          @matchers.concat(build_search_term(field: field, value: value, options: options))
+          @query.concat(build_search_term(field: field, value: value, options: options))
         end
       end
 
@@ -36,9 +44,9 @@ module Fulfil
       end
 
       if terms.length > 1
-        @matchers.push(['OR'].concat(terms))
+        @query.push(['OR'].concat(terms))
       else
-        @matchers.concat(terms.first)
+        @query.concat(terms.first)
       end
 
       self
@@ -86,11 +94,39 @@ module Fulfil
           [[key, 'ilike', value]]
         end
       when 'Hash'
-        value.flat_map do |nested_field, nested_value|
-          build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
-        end
+        handle_hash(field, key, value, options)
+      when 'Date', 'DateTime'
+        [[key, '=', Converter.date_or_datetime_as_object(value)]]
       else
         raise "Unhandled value type: #{value} (#{value.class.name})"
+      end
+    end
+
+    def handle_hash(field, key, value, options)
+      if OPERATOR_MAP.keys.any? { |op| value.key?(op) }
+        handle_operator_comparison(key, value)
+      else
+        handle_nested_fields(field, value, options)
+      end
+    end
+
+    def handle_operator_comparison(key, value)
+      value.map do |operator, val|
+        [key, OPERATOR_MAP[operator], convert_date_or_datetime(val)]
+      end
+    end
+
+    def convert_date_or_datetime(value)
+      if value.is_a?(Date) || value.is_a?(DateTime)
+        Converter.date_or_datetime_as_object(value)
+      else
+        value
+      end
+    end
+
+    def handle_nested_fields(field, value, options)
+      value.flat_map do |nested_field, nested_value|
+        build_search_term(prefix: field, field: nested_field, value: nested_value, options: options)
       end
     end
 
