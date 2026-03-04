@@ -3,6 +3,7 @@
 require 'test_helper'
 
 module Fulfil
+  # rubocop:disable Metrics/ClassLength
   class ClientTest < Minitest::Test
     def test_invalid_client
       assert_raises('InvalidClientError') { Fulfil::Client.new(subdomain: nil, token: nil) }
@@ -105,11 +106,11 @@ module Fulfil
     def test_retry_has_max_attempts
       sale_id = 404
       request_stub = stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
-        .to_return(status: 200, body: '', headers: {
-                     'Content-Type': 'application/json',
-                     'X-RateLimit-Remaining': 0,
-                     'X-RateLimit-Reset' => (Time.now.utc.to_i + 1).to_s
-                   })
+                     .to_return(status: 200, body: '', headers: {
+                                  'Content-Type': 'application/json',
+                                  'X-RateLimit-Remaining': 0,
+                                  'X-RateLimit-Reset' => (Time.now.utc.to_i + 1).to_s
+                                })
 
       with_fulfil_config do |config|
         config.retry_on_rate_limit = true
@@ -128,7 +129,6 @@ module Fulfil
 
     def test_retry_prefers_rate_limit_reset_header
       fixed_now = Time.utc(2026, 3, 4, 0, 0, 0)
-
       with_fulfil_config do |config|
         config.retry_on_rate_limit_wait = 0.01
         config.retry_on_rate_limit_jitter = 0
@@ -138,7 +138,7 @@ module Fulfil
         Fulfil.rate_limit.resets_at = Time.at(fixed_now.to_i + 3).utc.to_datetime
 
         Time.stub(:now, fixed_now) do
-          assert_equal 3.0, client.send(:rate_limit_retry_wait)
+          assert_in_delta(3.0, client.send(:rate_limit_retry_wait))
         end
       end
     end
@@ -148,11 +148,10 @@ module Fulfil
         config.retry_on_rate_limit_wait = 1
         config.retry_on_rate_limit_use_reset_at = false
         config.retry_on_rate_limit_jitter = 0.25
-
         client = Fulfil::Client.new
 
-        client.stub(:rand, 1.1) do
-          assert_equal 1.1, client.send(:rate_limit_retry_wait)
+        Fulfil::RateLimitRetryWait.stub(:rand, 1.1) do
+          assert_in_delta(1.1, client.send(:rate_limit_retry_wait))
         end
       end
     end
@@ -181,4 +180,5 @@ module Fulfil
       end
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end

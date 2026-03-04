@@ -12,6 +12,7 @@ require 'fulfil/response_parser'
 # Rate limiting
 require 'fulfil/rate_limit'
 require 'fulfil/rate_limit_headers'
+require 'fulfil/rate_limit_retry_wait'
 
 module Fulfil
   def self.rate_limit
