@@ -159,26 +159,28 @@ module Fulfil
     def request(endpoint:, verb: :get, **args)
       attempts = 0
 
-      response = client.request(verb, endpoint, args)
-      Fulfil::ResponseHandler.new(response).verify!
+      begin
+        response = client.request(verb, endpoint, args)
+        Fulfil::ResponseHandler.new(response).verify!
 
-      response.parse
-    rescue HTTP::ConnectionError => e
-      raise ConnectionError, "Can't connect to #{base_url}"
-    rescue HTTP::ResponseError => e
-      raise ResponseError, "Can't process response: #{e}"
-    rescue HTTP::Error => e
-      raise UnknownHTTPError, 'Unhandled HTTP error encountered'
-    # If configured, the client will wait whenever the `RateLimitExceeded` exception
-    # is raised. Check `Fulfil::Configuration` for more details.
-    rescue RateLimitExceeded => e
-      raise e unless config.retry_on_rate_limit?
+        response.parse
+      rescue HTTP::ConnectionError => e
+        raise ConnectionError, "Can't connect to #{base_url}"
+      rescue HTTP::ResponseError => e
+        raise ResponseError, "Can't process response: #{e}"
+      rescue HTTP::Error => e
+        raise UnknownHTTPError, 'Unhandled HTTP error encountered'
+      # If configured, the client will wait whenever the `RateLimitExceeded` exception
+      # is raised. Check `Fulfil::Configuration` for more details.
+      rescue RateLimitExceeded => e
+        raise e unless config.retry_on_rate_limit?
 
-      attempts += 1
-      raise e if attempts > config.retry_on_rate_limit_max_attempts
+        attempts += 1
+        raise e if attempts > config.retry_on_rate_limit_max_attempts
 
-      sleep(rate_limit_retry_wait)
-      retry
+        sleep(rate_limit_retry_wait)
+        retry
+      end
     end
 
     def rate_limit_retry_wait
