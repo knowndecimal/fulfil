@@ -167,22 +167,22 @@ report.execute(start_date: Date.new(2020, 12, 1), end_date: Date.new(2020, 12, 3
 ## Remote resources
 
 For apps that prefer a small domain object layer on top of `Fulfil::Model`,
-this gem includes `Fulfil::RemoteResource` and a starter
-`Fulfil::RemoteProduct` class.
+this gem includes `Fulfil::Remote::Resource` and a starter
+`Fulfil::Remote::Product` class.
 
 ```ruby
 # Fetch one
-product = Fulfil::RemoteProduct.find(123)
+product = Fulfil::Remote::Product.find(123)
 
 # Fetch many
-products = Fulfil::RemoteProduct.all(ids: [123, 456])
+products = Fulfil::Remote::Product.all(ids: [123, 456])
 
 product.name
 product.sku
 product.quantity_available
 ```
 
-You can subclass `Fulfil::RemoteResource` to add additional domain-specific
+You can subclass `Fulfil::Remote::Resource` to add additional domain-specific
 remote models.
 
 ## Date Ranges

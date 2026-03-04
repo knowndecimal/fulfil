@@ -1,7 +1,7 @@
 ## Unreleased
 
-* Add `Fulfil::RemoteResource` as a base class for Fulfil-backed domain resource objects.
-* Add `Fulfil::RemoteProduct` as an initial domain-specific remote resource implementation.
+* Add `Fulfil::Remote::Resource` as a base class for Fulfil-backed domain resource objects.
+* Add `Fulfil::Remote::Product` as an initial domain-specific remote resource implementation.
 * Document remote resource usage and expectations in the README.
 * Add robust query/domain parsing and value conversion for Fulfil-style filters, including date and datetime coercion, HTML entity normalization, and operator mapping.
 * Improve client query handling and test coverage for converted search domains and date/datetime filtering behavior.
