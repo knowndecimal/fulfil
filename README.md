@@ -167,8 +167,8 @@ report.execute(start_date: Date.new(2020, 12, 1), end_date: Date.new(2020, 12, 3
 ## Remote resources
 
 For apps that prefer a small domain object layer on top of `Fulfil::Model`,
-this gem includes `Fulfil::Remote::Resource` and a starter
-`Fulfil::Remote::Product` class.
+this gem includes `Fulfil::Remote::Resource` with concrete starter models:
+`Fulfil::Remote::Product`, `Fulfil::Remote::Sale`, and `Fulfil::Remote::SaleLine`.
 
 ```ruby
 # Fetch one
@@ -180,6 +180,11 @@ products = Fulfil::Remote::Product.all(ids: [123, 456])
 product.name
 product.sku
 product.quantity_available
+
+sale = Fulfil::Remote::Sale.find(213_112)
+line_items = sale.lines
+first_line = line_items.first
+first_line.product_id
 ```
 
 You can subclass `Fulfil::Remote::Resource` to add additional domain-specific
