@@ -27,7 +27,13 @@ jobs:
       - name: Run all tests
         run: |
           cp .env.example .env
-          bin/rake test
+          timeout 10m bin/rake test || {
+            code=$?
+            if [ "$code" -eq 124 ]; then
+              echo "Test run timed out after 10 minutes"
+            fi
+            exit "$code"
+          }
 
       - name: Qlty Coverage Upload
         if: matrix.ruby-version == '3.4'
