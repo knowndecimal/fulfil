@@ -129,9 +129,19 @@ module Fulfil
     end
 
     def parse(result: nil, results: [])
-      return Fulfil::ResponseParser.parse(item: result) if result
+      if result
+        parse_single(result: result)
+      else
+        parse_multiple(results: results)
+      end
+    end
 
-      results.map { |item| Fulfil::ResponseParser.parse(item: item) }
+    def parse_single(result:)
+      Fulfil::ResponseParser.parse(item: result)
+    end
+
+    def parse_multiple(results:)
+      results.map { |result| Fulfil::ResponseParser.parse(item: result) }
     end
 
     def domain
