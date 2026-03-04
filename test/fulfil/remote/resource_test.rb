@@ -73,6 +73,16 @@ module Fulfil
         assert_equal one, two
         refute_equal one, three
       end
+
+      def test_client_assignment
+        fake_client = Object.new
+
+        TestRemoteResource.client = fake_client
+
+        assert_equal fake_client, TestRemoteResource.client
+      ensure
+        TestRemoteResource.client = nil
+      end
     end
   end
 end

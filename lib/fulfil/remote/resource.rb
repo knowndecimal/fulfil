@@ -119,9 +119,23 @@ module Fulfil
           from_fulfil(response)
         end
 
+        # @return [Fulfil::Client] client used for remote resource requests
+        def client
+          @client ||= Fulfil::Client.new
+        end
+
+        # Overrides the client used for remote resource requests.
+        #
+        # @param client [Fulfil::Client]
+        # @return [Fulfil::Client]
+        def client=(client)
+          @client = client
+          @fulfil_model = nil
+        end
+
         # @return [Fulfil::Model] model wrapper configured for the subclass
         def fulfil_model
-          @fulfil_model ||= Fulfil::Model.new(client: FulfilClient, model_name: self::FULFIL_MODEL_NAME)
+          @fulfil_model ||= Fulfil::Model.new(client: client, model_name: self::FULFIL_MODEL_NAME)
         end
 
         # Converts a raw Fulfil response row into a resource instance.
