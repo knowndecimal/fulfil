@@ -21,8 +21,8 @@ module Fulfil
       def self.from_fulfil(raw_sale_line)
         new(
           id: raw_sale_line['id'],
-          sale: raw_sale_line['sale'],
-          product: raw_sale_line['product'],
+          sale_ref: raw_sale_line['sale'],
+          product_ref: raw_sale_line['product'],
           quantity: raw_sale_line['quantity'],
           unit_price: raw_sale_line['unit_price'],
           amount: raw_sale_line['amount'],
@@ -31,23 +31,23 @@ module Fulfil
       end
 
       # @return [Integer, Array, nil] sale reference payload
-      def sale
-        attributes['sale']
+      def sale_ref
+        attributes['sale_ref']
       end
 
       # @return [Integer, nil] sale id extracted from payload
       def sale_id
-        extract_id(sale)
+        extract_remote_id(sale_ref)
       end
 
       # @return [Integer, Array, nil] product reference payload
-      def product
-        attributes['product']
+      def product_ref
+        attributes['product_ref']
       end
 
       # @return [Integer, nil] product id extracted from payload
       def product_id
-        extract_id(product)
+        extract_remote_id(product_ref)
       end
 
       # @return [Numeric, nil] quantity ordered
@@ -70,20 +70,7 @@ module Fulfil
         attributes['description']
       end
 
-      # @return [Fulfil::Remote::Sale, nil] associated sale
-      def sale_record
-        return nil if sale_id.nil?
-
-        Sale.find(sale_id)
-      end
-
-      private
-
-      # @param value [Integer, Array, nil]
-      # @return [Integer, nil]
-      def extract_id(value)
-        value.is_a?(Array) ? value.first : value
-      end
+      belongs_to :sale, class_name: 'Fulfil::Remote::Sale', foreign_key: :sale_ref
     end
   end
 end

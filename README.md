@@ -182,8 +182,9 @@ product.sku
 product.quantity_available
 
 sale = Fulfil::Remote::Sale.find(213_112)
-line_items = sale.lines
+line_items = sale.lines # has_many
 first_line = line_items.first
+first_line.sale          # belongs_to
 first_line.product_id
 ```
 

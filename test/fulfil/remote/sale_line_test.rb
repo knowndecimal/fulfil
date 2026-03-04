@@ -19,7 +19,7 @@ module Fulfil
         sale_line = SaleLine.from_fulfil(raw_sale_line)
 
         assert_equal 217_937, sale_line.id
-        assert_equal [213_112, 'SO79797'], sale_line.sale
+        assert_equal [213_112, 'SO79797'], sale_line.sale_ref
         assert_equal 213_112, sale_line.sale_id
         assert_equal 53_101, sale_line.product_id
         assert_in_delta 1.0, sale_line.quantity
@@ -28,18 +28,18 @@ module Fulfil
         assert_equal 'Widget XL', sale_line.description
       end
 
-      def test_sale_record_uses_sale_id
-        sale_line = SaleLine.new(sale: [100, 'SO100'])
+      def test_belongs_to_sale_uses_sale_id
+        sale_line = SaleLine.new(sale_ref: [100, 'SO100'])
 
         Sale.stub(:find, :sale_record) do
-          assert_equal :sale_record, sale_line.sale_record
+          assert_equal :sale_record, sale_line.sale
         end
       end
 
-      def test_sale_record_returns_nil_when_sale_missing
-        sale_line = SaleLine.new(sale: nil)
+      def test_belongs_to_sale_returns_nil_when_sale_missing
+        sale_line = SaleLine.new(sale_ref: nil)
 
-        assert_nil sale_line.sale_record
+        assert_nil sale_line.sale
       end
     end
   end

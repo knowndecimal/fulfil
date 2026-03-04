@@ -72,12 +72,7 @@ module Fulfil
         attributes['created_at']
       end
 
-      # @return [Array<Fulfil::Remote::SaleLine>] sale lines for this sale
-      def lines
-        return [] if line_ids.empty?
-
-        SaleLine.all(ids: line_ids)
-      end
+      has_many :lines, class_name: 'Fulfil::Remote::SaleLine', ids_key: :line_ids
     end
   end
 end
