@@ -76,6 +76,12 @@ module Fulfil
 
       assert_equal [['datetime', '<', expected_datetime_format]], @query.query
     end
+
+    def test_numeric_operator_comparisons_are_not_converted
+      @query.search(total: { gte: 10 })
+
+      assert_equal [['total', '>=', 10]], @query.query
+    end
     # -- #exclude -----------------------
 
     def test_equals_exclude

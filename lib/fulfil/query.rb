@@ -112,7 +112,15 @@ module Fulfil
 
     def handle_operator_comparison(key, value)
       value.map do |operator, val|
-        [key, OPERATOR_MAP[operator], Converter.date_or_datetime_as_object(val)]
+        [key, OPERATOR_MAP[operator], convert_date_or_datetime(val)]
+      end
+    end
+
+    def convert_date_or_datetime(value)
+      if value.is_a?(Date) || value.is_a?(DateTime)
+        Converter.date_or_datetime_as_object(value)
+      else
+        value
       end
     end
 

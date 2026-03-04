@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
 require 'fulfil/converter'
-require 'fulfil/concerns/html_entity_handler'
 
 module Fulfil
-  # Parses domain arrays and converts Date/DateTime objects into Fulfil's expected format
-  # Handles the conversion of Ruby objects to Fulfil-compatible JSON structures
+  # Parses domain payloads and converts Date/DateTime objects into Fulfil's expected format.
   class DomainParser
-    include Concerns::HtmlEntityHandler
-
     attr_reader :domain
 
     def initialize(domain)
@@ -16,32 +12,24 @@ module Fulfil
     end
 
     def parsed
-      with_disabled_html_entities do
-        domain.map { |values| update_values(values) }
-      end
-    end
-
-    def update_values(values)
-      values.map do |value|
-        case value.class.name
-        when 'Date'
-          date_as_object(value)
-        when 'DateTime'
-          datetime_as_object(value)
-        else
-          value
-        end
-      end
+      convert(domain)
     end
 
     private
 
-    def date_as_object(date)
-      Converter.date_as_object(date)
-    end
-
-    def datetime_as_object(datetime)
-      Converter.datetime_as_object(datetime)
+    def convert(value)
+      case value
+      when DateTime
+        Converter.datetime_as_object(value)
+      when Date
+        Converter.date_as_object(value)
+      when Array
+        value.map { |item| convert(item) }
+      when Hash
+        value.transform_values { |item| convert(item) }
+      else
+        value
+      end
     end
   end
 end
