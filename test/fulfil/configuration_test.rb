@@ -14,6 +14,12 @@ module Fulfil
       end
     end
 
+    def test_rate_limit_retry_defaults
+      assert_equal 3, Fulfil.config.retry_on_rate_limit_max_attempts
+      assert_equal 0.2, Fulfil.config.retry_on_rate_limit_jitter
+      assert_equal true, Fulfil.config.retry_on_rate_limit_use_reset_at
+    end
+
     def test_default_logger
       assert_instance_of Logger, Fulfil.config.logger
     end

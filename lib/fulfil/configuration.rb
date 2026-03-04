@@ -10,6 +10,9 @@ module Fulfil
     # By default, the `Fulfil::Client` will wait 1 second before retrying again.
     attr_accessor :retry_on_rate_limit
     attr_accessor :retry_on_rate_limit_wait
+    attr_accessor :retry_on_rate_limit_max_attempts
+    attr_accessor :retry_on_rate_limit_jitter
+    attr_accessor :retry_on_rate_limit_use_reset_at
 
     # Allows the client to configure a notification handler. Can be used by APM
     # tools to monitor the number of rate limit hits.
@@ -38,6 +41,9 @@ module Fulfil
     def initialize
       @retry_on_rate_limit = false
       @retry_on_rate_limit_wait = 1
+      @retry_on_rate_limit_max_attempts = 3
+      @retry_on_rate_limit_jitter = 0.2
+      @retry_on_rate_limit_use_reset_at = true
       @logger = Logger.new($stderr)
     end
 

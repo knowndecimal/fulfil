@@ -192,7 +192,10 @@ Automatic retries are supported whenever the rate limit is reached. However, it'
 
 Fulfil.configure do |config|
   config.retry_on_rate_limit = true # Defaults to false
-  config.retry_on_rate_limit_wait = 0.25 # Defaults to 1 (second)
+  config.retry_on_rate_limit_wait = 0.25 # Base wait fallback, defaults to 1 second
+  config.retry_on_rate_limit_max_attempts = 5 # Defaults to 3 retries
+  config.retry_on_rate_limit_jitter = 0.2 # +/- 20% random jitter, defaults to 0.2
+  config.retry_on_rate_limit_use_reset_at = true # Prefer X-RateLimit-Reset when present
 end
 ```
 

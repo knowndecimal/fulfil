@@ -157,6 +157,8 @@ module Fulfil
     end
 
     def request(endpoint:, verb: :get, **args)
+      attempts = 0
+
       response = client.request(verb, endpoint, args)
       Fulfil::ResponseHandler.new(response).verify!
 
@@ -172,8 +174,35 @@ module Fulfil
     rescue RateLimitExceeded => e
       raise e unless config.retry_on_rate_limit?
 
-      sleep config.retry_on_rate_limit_wait
+      attempts += 1
+      raise e if attempts > config.retry_on_rate_limit_max_attempts
+
+      sleep(rate_limit_retry_wait)
       retry
+    end
+
+    def rate_limit_retry_wait
+      wait = reset_aware_retry_wait || config.retry_on_rate_limit_wait.to_f
+      apply_jitter(wait)
+    end
+
+    def reset_aware_retry_wait
+      return unless config.retry_on_rate_limit_use_reset_at
+
+      reset_at = Fulfil.rate_limit.resets_at
+      return unless reset_at
+
+      reset_time = reset_at.respond_to?(:to_time) ? reset_at.to_time : Time.at(reset_at.to_i).utc
+      [reset_time - Time.now.utc, 0].max
+    end
+
+    def apply_jitter(wait)
+      jitter_ratio = config.retry_on_rate_limit_jitter.to_f
+      return wait if jitter_ratio <= 0
+
+      min = wait * (1 - jitter_ratio)
+      max = wait * (1 + jitter_ratio)
+      rand(min..max)
     end
 
     def client
