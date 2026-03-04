@@ -1,6 +1,6 @@
 ## Unreleased
 
-* Add robust query/domain parsing and value conversion for Odoo-style filters, including date and datetime coercion, HTML entity normalization, and operator mapping.
+* Add robust query/domain parsing and value conversion for Fulfil-style filters, including date and datetime coercion, HTML entity normalization, and operator mapping.
 * Improve client query handling and test coverage for converted search domains and date/datetime filtering behavior.
 * Documentation updates for query conversion and domain parsing behavior.
 
