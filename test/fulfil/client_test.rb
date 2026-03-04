@@ -3,6 +3,7 @@
 require 'test_helper'
 
 module Fulfil
+  # rubocop:disable Metrics/ClassLength
   class ClientTest < Minitest::Test
     def test_invalid_client
       assert_raises('InvalidClientError') { Fulfil::Client.new(subdomain: nil, token: nil) }
@@ -102,6 +103,59 @@ module Fulfil
       end
     end
 
+    def test_retry_has_max_attempts
+      sale_id = 404
+      request_stub = stub_request(:get, fulfil_url_for("sale.sale/#{sale_id}"))
+                     .to_return(status: 200, body: '', headers: {
+                                  'Content-Type': 'application/json',
+                                  'X-RateLimit-Remaining': 0,
+                                  'X-RateLimit-Reset' => (Time.now.utc.to_i + 1).to_s
+                                })
+
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit = true
+        config.retry_on_rate_limit_wait = 0
+        config.retry_on_rate_limit_max_attempts = 2
+        config.retry_on_rate_limit_use_reset_at = false
+        config.retry_on_rate_limit_jitter = 0
+
+        assert_raises Fulfil::RateLimitExceeded do
+          Fulfil::Client.new.find_one(model: 'sale.sale', id: sale_id)
+        end
+      end
+
+      assert_requested request_stub, times: 3
+    end
+
+    def test_retry_prefers_rate_limit_reset_header
+      fixed_now = Time.utc(2026, 3, 4, 0, 0, 0)
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit_wait = 0.01
+        config.retry_on_rate_limit_jitter = 0
+        config.retry_on_rate_limit_use_reset_at = true
+
+        client = Fulfil::Client.new
+        Fulfil.rate_limit.resets_at = Time.at(fixed_now.to_i + 3).utc.to_datetime
+
+        Time.stub(:now, fixed_now) do
+          assert_in_delta(3.0, client.send(:rate_limit_retry_wait))
+        end
+      end
+    end
+
+    def test_retry_applies_jitter
+      with_fulfil_config do |config|
+        config.retry_on_rate_limit_wait = 1
+        config.retry_on_rate_limit_use_reset_at = false
+        config.retry_on_rate_limit_jitter = 0.25
+        client = Fulfil::Client.new
+
+        Fulfil::RateLimitRetryWait.stub(:rand, 1.1) do
+          assert_in_delta(1.1, client.send(:rate_limit_retry_wait))
+        end
+      end
+    end
+
     def test_connection_error_maps_to_connection_error
       client = Fulfil::Client.new(subdomain: 'test', token: '123')
       transport = Object.new
@@ -126,4 +180,5 @@ module Fulfil
       end
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
