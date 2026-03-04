@@ -164,6 +164,33 @@ report = Fulfil::Report.new(client: fulfil, report_name: 'account.tax.summary.ir
 report.execute(start_date: Date.new(2020, 12, 1), end_date: Date.new(2020, 12, 31))
 ```
 
+## Remote resources
+
+For apps that prefer a small domain object layer on top of `Fulfil::Model`,
+this gem includes `Fulfil::Remote::Resource` with concrete starter models:
+`Fulfil::Remote::Product`, `Fulfil::Remote::Sale`, and `Fulfil::Remote::SaleLine`.
+
+```ruby
+# Fetch one
+product = Fulfil::Remote::Product.find(123)
+
+# Fetch many
+products = Fulfil::Remote::Product.all(ids: [123, 456])
+
+product.name
+product.sku
+product.quantity_available
+
+sale = Fulfil::Remote::Sale.find(213_112)
+line_items = sale.lines # has_many
+first_line = line_items.first
+first_line.sale          # belongs_to
+first_line.product_id
+```
+
+You can subclass `Fulfil::Remote::Resource` to add additional domain-specific
+remote models.
+
 ## Date Ranges
 Fulfil expects an ISO8601 date when retrieving a date range.  The GEM will take a `date` or `datetime` and parse it into the object Fulfil expects.
 
