@@ -31,3 +31,7 @@ Style/ClassAndModuleChildren:
 
 Gemspec/RequiredRubyVersion:
   Enabled: false
+
+Metrics/ClassLength:
+  Exclude:
+    - lib/fulfil/client.rb
