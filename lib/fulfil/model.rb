@@ -20,26 +20,17 @@ module Fulfil
 
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
-    def search(
-      domain:,
-      model: model_name,
-      fields: %w[id rec_name],
-      limit: nil,
-      offset: nil,
-      sort: nil
-    )
+    def search(domain:, model: model_name, fields: %w[id rec_name], **options)
       @client.search(
         model: model,
         domain: domain,
         fields: fields,
-        limit: limit,
-        offset: offset,
-        sort: sort
+        **options
       )
     end
 
-    def count(domain:)
-      @client.count(model: model_name, domain: domain)
+    def count(domain:, context: nil)
+      @client.count(model: model_name, domain: domain, context: context)
     end
 
     def all
