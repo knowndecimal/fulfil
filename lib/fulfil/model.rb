@@ -20,13 +20,23 @@ module Fulfil
 
     # Delegate this to the client, including the model_name so we don't have to
     # type it every time.
+    #
+    # @param domain [Array] Fulfil domain query
+    # @param model [String] Fulfil model name
+    # @param fields [Array<String>] fields to return
+    # @param limit [Integer, nil] max number of records
+    # @param offset [Integer, nil] record offset
+    # @param sort [String, nil] sort expression, e.g. "id DESC"
+    # @param context [Hash, String, nil] optional Fulfil context URL param
+    # rubocop:disable Metrics/ParameterLists
     def search(
       domain:,
       model: model_name,
       fields: %w[id rec_name],
       limit: nil,
       offset: nil,
-      sort: nil
+      sort: nil,
+      context: nil
     )
       @client.search(
         model: model,
@@ -34,12 +44,14 @@ module Fulfil
         fields: fields,
         limit: limit,
         offset: offset,
-        sort: sort
+        sort: sort,
+        context: context
       )
     end
+    # rubocop:enable Metrics/ParameterLists
 
-    def count(domain:)
-      @client.count(model: model_name, domain: domain)
+    def count(domain:, context: nil)
+      @client.count(model: model_name, domain: domain, context: context)
     end
 
     def all

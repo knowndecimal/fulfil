@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'http'
+require 'json'
 require 'logger'
 require 'fulfil/response_parser'
 require 'fulfil/domain_parser'
@@ -75,17 +76,24 @@ module Fulfil
       parse(results: results)
     end
 
-    def search(model:, domain:, offset: nil, limit: 100, sort: nil, fields: %w[id])
-      uri = URI("#{model_url(model: model)}/search_read")
+    def search(model:, domain:, **options)
+      context = options.fetch(:context, nil)
+      uri = model_uri(model: model, endpoint: 'search_read', context: context)
       parsed_domain = Fulfil::DomainParser.new(domain).parsed
-      body = [parsed_domain, offset, limit, sort, fields]
+      body = [
+        parsed_domain,
+        options.fetch(:offset, nil),
+        options.fetch(:limit, 100),
+        options.fetch(:sort, nil),
+        options.fetch(:fields, %w[id])
+      ]
 
       results = request(verb: :put, endpoint: uri, json: body)
       parse(results: results)
     end
 
-    def count(model:, domain:)
-      uri = URI("#{model_url(model: model)}/search_count")
+    def count(model:, domain:, context: nil)
+      uri = model_uri(model: model, endpoint: 'search_count', context: context)
       parsed_domain = Fulfil::DomainParser.new(domain).parsed
       body = [parsed_domain]
 
@@ -157,6 +165,18 @@ module Fulfil
 
     def model_url(model:, id: nil, endpoint: nil)
       [base_url, 'model', model, id, endpoint].compact.join('/')
+    end
+
+    def model_uri(model:, id: nil, endpoint: nil, context: nil)
+      uri = URI(model_url(model: model, id: id, endpoint: endpoint))
+      return uri if context.nil?
+
+      uri.query = URI.encode_www_form(context: context_query_value(context))
+      uri
+    end
+
+    def context_query_value(context)
+      context.is_a?(String) ? context : context.to_json
     end
 
     def request(endpoint:, verb: :get, **args)

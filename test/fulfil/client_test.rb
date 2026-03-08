@@ -72,6 +72,34 @@ module Fulfil
       assert_equal 362_560, order_count
     end
 
+    def test_search_supports_context_url_option
+      context = { locations: [12, 34] }
+      expected_context = context.to_json
+
+      request_stub = stub_request(:put, fulfil_url_for('product.product/search_read'))
+                     .with(query: { context: expected_context })
+                     .to_return(status: 200, body: [].to_json, headers: valid_response_headers)
+
+      client = Fulfil::Client.new
+      client.search(model: 'product.product', domain: [], context: context)
+
+      assert_requested request_stub, times: 1
+    end
+
+    def test_count_supports_context_url_option
+      context = { locations: [12, 34] }
+      expected_context = context.to_json
+
+      request_stub = stub_request(:put, fulfil_url_for('product.product/search_count'))
+                     .with(query: { context: expected_context })
+                     .to_return(status: 200, body: '0', headers: valid_response_headers)
+
+      client = Fulfil::Client.new
+      client.count(model: 'product.product', domain: [], context: context)
+
+      assert_requested request_stub, times: 1
+    end
+
     def test_retry_on_request_failure_when_configured
       sale_id = 404
 

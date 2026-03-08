@@ -58,6 +58,14 @@ sales = sale_model.search(
   fields: ['id', 'rec_name', 'lines']
 )
 
+# Optional: pass context as a URL option (Fulfil expects a JSON string)
+# Useful for location-specific inventory calls.
+inventory = Fulfil::Model.new(client: fulfil, model_name: 'product.product').search(
+  domain: [['id', 'in', [1, 2, 3]]],
+  fields: ['id', 'rec_name', 'quantity_available'],
+  context: { locations: [10, 11] }
+)
+
 # -- OR --
 
 sale_model.query(id: 100)
