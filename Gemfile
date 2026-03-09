@@ -7,7 +7,7 @@ gemspec
 group :development do
   gem 'bundler', '~> 2.0'
   gem 'dotenv', '~> 3.2'
-  gem 'minitest', '~> 5.0'
+  gem 'minitest', '~> 6.0'
   gem 'minitest-ci', '~> 3.4' if ENV['CI']
   gem 'minitest-reporters', '~> 1.3'
   gem 'oauth2', '~> 2.0'
