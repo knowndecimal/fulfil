@@ -5,7 +5,7 @@ require 'fulfil/query'
 require 'fulfil/converter'
 require 'date'
 
-# rubocop:disable Metrics/ClassLength
+# rubocop:disable-next Metrics/ClassLength
 module Fulfil
   class QueryTest < Minitest::Test
     def setup
@@ -218,4 +218,3 @@ module Fulfil
     end
   end
 end
-# rubocop:enable Metrics/ClassLength
