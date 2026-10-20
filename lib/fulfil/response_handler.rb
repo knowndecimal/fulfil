@@ -15,7 +15,8 @@ module Fulfil
       406 => Fulfil::HttpError::NotAccepted,
       422 => Fulfil::HttpError::UnprocessableEntity,
       429 => Fulfil::HttpError::TooManyRequests,
-      500 => Fulfil::HttpError::InternalServerError
+      500 => Fulfil::HttpError::InternalServerError,
+      503 => Fulfil::HttpError::ServiceUnavailable
     }.freeze
 
     def initialize(response)
@@ -68,6 +69,10 @@ module Fulfil
     end
 
     def response_error_metadata(payload)
+      # An unparseable response may be a proxy's plain-text error page. Do not
+      # attach that body (or its headers) to an exception reported by callers.
+      return { status: @response.status } if payload.nil?
+
       body = payload.is_a?(Hash) ? payload : {}
 
       {
@@ -84,6 +89,8 @@ module Fulfil
 
     def response_body
       @response_body ||= @response.parse
+    rescue HTTP::Error
+      nil
     end
 
     def present?(value)
