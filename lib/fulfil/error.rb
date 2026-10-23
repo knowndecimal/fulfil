@@ -25,5 +25,6 @@ module Fulfil
     class UnprocessableEntity < HttpError; end
     class TooManyRequests < HttpError; end
     class InternalServerError < HttpError; end
+    class ServiceUnavailable < HttpError; end
   end
 end

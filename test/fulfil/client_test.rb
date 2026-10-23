@@ -4,7 +4,7 @@ require 'test_helper'
 require 'date'
 
 module Fulfil
-  # rubocop:disable Metrics/ClassLength
+  # rubocop:disable-next Metrics/ClassLength
   class ClientTest < Minitest::Test
     def test_invalid_client
       assert_raises('InvalidClientError') { Fulfil::Client.new(subdomain: nil, token: nil) }
@@ -181,6 +181,20 @@ module Fulfil
       end
     end
 
+    def test_plain_text_service_unavailable_response_preserves_status_without_exposing_body
+      secret_body = 'upstream maintenance details: token=do-not-expose'
+      stub_request(:get, fulfil_url_for('sale.sale/503'))
+        .to_return(status: 503, body: secret_body, headers: { 'Content-Type': 'text/plain' })
+
+      error = assert_raises(Fulfil::HttpError::ServiceUnavailable) do
+        Fulfil::Client.new.find_one(model: 'sale.sale', id: 503)
+      end
+
+      assert_equal 'Fulfil request failed (HTTP 503)', error.message
+      assert_equal 503, error.metadata[:status].to_i
+      refute_includes "#{error.message} #{error.metadata}", secret_body
+    end
+
     def test_date_conversion_in_search
       date = Date.new(2022, 1, 1)
       datetime = date.to_datetime
@@ -257,5 +271,4 @@ module Fulfil
       end
     end
   end
-  # rubocop:enable Metrics/ClassLength
 end
